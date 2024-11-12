@@ -35,7 +35,7 @@
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>
                                 <li><a href="./shop-details.html">Shop Details</a></li>
-                                <li><a href="?act=spCart">Shopping Cart</a></li>
+                                <li><a href="?act=Cart">Shopping Cart</a></li>
                                 <li><a href="./checkout.html">Check Out</a></li>
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
@@ -49,7 +49,7 @@
                 <div class="header__nav__option">
                     <a href="#" id="searchIcon" class="search-switch"><img src="./assets/images/icon/search.png" alt=""></a>
                     <a href="#"><img src="./assets/images/icon/heart.png" alt=""></a>
-                    <a href="?act=spCart"><img src="./assets/images/icon/cart.png" alt=""></a>
+                    <a href="?act=Cart"><img src="./assets/images/icon/cart.png" alt=""></a>
                     <a href="#" id="loginBtn"><img src="./assets/images/icon/user1.png" alt=""></a>
                     <?php require_once 'login.php' ?>
                 </div>

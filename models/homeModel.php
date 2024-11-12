@@ -56,6 +56,18 @@ class homeModel{
         // Ensure product is found
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
+    function Card() {
+        // Kiểm tra nếu 'carts' đã tồn tại trong $_SESSION
+        if (isset($_SESSION['carts'])) {
+            $row = $_SESSION['carts'];
+        } else {
+            // Nếu không tồn tại, khởi tạo $row như một mảng rỗng
+            $row = [];
+        }
+    
+        require_once 'views/shopping-cart.php';
+    }
+    
     
 
     // Fetch limited products for "Hot Sales" (random selection)

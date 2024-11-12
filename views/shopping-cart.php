@@ -67,34 +67,60 @@
                             </thead>
                             <!-- table shopping-cart -->
                             <tbody>
-                                <tr>
-                                    <td class="product__cart__item">
-                                        <div class="product__cart__item__pic">
-                                            <img src="./assets/images/product/<?= $row['image'] ?>" alt="" width="100px">
-                                        </div>
-                                        <div class="product__cart__item__text">
-                                            <h6><?= $row['title'] ?></h6>
-                                            <h5><?= number_format($row['price']) . 'đ' ?></h5>
-                                        </div>
-                                    </td>
-                                    <td class="quantity__item">
-                                        <div class="quantity">
-                                            <div class="product-quantity">
-                                                <button class="quantity-btn">-</button>
-                                                <input type="text" id="quantity" value="1" readonly>
-                                                <button class="quantity-btn">+</button>
-                                            </div>
+                                <?php
+                                $_SESSION['sum_price'] = 0;
+                                if (isset($_SESSION['carts']) && !empty($_SESSION['carts'])) {
+                                    foreach ($_SESSION['carts'] as $value) {
+                                ?>
+                                        <tr>
+                                            <td class="product__cart__item">
+                                                <div class="product__cart__item__pic">
+                                                    <img src="./assets/images/product/<?= $value['image'] ?>" alt="" width="100px">
+                                                </div>
+                                                <div class="product__cart__item__text">
+                                                    <h6><?= $value['title'] ?></h6>
+                                                    <h5><?= number_format($value['price']) . 'đ' ?></h5>
+                                                </div>
+                                            </td>
+                                            <td class="quantity__item">
+                                                <div class="quantity">
+                                                    <div class="product-quantity">
+                                                        <div class="product-quantity">
+                                                            <form action="?act=update_quantity" method="post" class="product-quantity-form">
+                                                                <input type="hidden" name="product_id" value="<?= $value['product_id'] ?>">
 
-                                        </div>
+                                                                <!-- Nút Giảm Số Lượng -->
+                                                                <button type="submit" name="action" value="decrease" class="quantity-btn">-</button>
 
-                                    </td>
-                                    <td class="cart__price">
-                                    <?php 
-                                    echo $row['price'] * $row['qty'];
-                                    ?>
-                                    </td>
-                                    <td class="cart__close"><i class="fa fa-close"></i></td>
-                                </tr>
+                                                                <!-- Hiển Thị Số Lượng -->
+                                                                <input type="text" id="quantity" name="quantity" value="<?= $value['qty'] ?>" readonly>
+
+                                                                <!-- Nút Tăng Số Lượng -->
+                                                                <button type="submit" name="action" value="increase" class="quantity-btn">+</button>
+                                                            </form>
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                </div>
+
+                                            </td>
+                                            <td class="cart__price">
+                                                <?php
+                                                $total = $value['price'] * $value['qty'];
+                                                $_SESSION['sum_price'] += $total;
+                                                echo number_format($total);
+                                                ?>
+                                            </td>
+                                            <td class="cart__close"><i class="fa fa-close"></i></td>
+                                        </tr>
+                                <?php
+                                    }
+                                }
+                                ?>
+
                             </tbody>
                             <!-- End table shopping-cart -->
                         </table>
@@ -102,7 +128,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="continue__btn">
-                                <a href="#">Continue Shopping</a>
+                                <a href="?act=shop">Continue Shopping</a>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -123,8 +149,8 @@
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span>$ 169.50</span></li>
-                            <li>Total <span>$ 169.50</span></li>
+                            <!-- <li>Subtotal <span>$ 169.50</span></li> -->
+                            <li>Total <span><?= number_format($_SESSION['sum_price']).'đ' ?></span></li>
                         </ul>
                         <a href="#" class="primary-btn">Proceed to checkout</a>
                     </div>

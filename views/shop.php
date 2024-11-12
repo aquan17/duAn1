@@ -23,7 +23,30 @@
     <link rel="stylesheet" href="./assets/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    .noti-success {
+    position: absolute;
+    top: 250px; /* Điều chỉnh vị trí dọc theo yêu cầu */
+    left: 15%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    background-color: #4CAF50; /* Màu nền xanh lá cây cho thông báo */
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeInOut 3s forwards;
+    z-index: 1000;
+}
 
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-10px); }
+    20%, 80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+    </style>
 <body>
     <?php
     require_once 'menu.php'
@@ -47,6 +70,13 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
+    <?php
+    if (isset($_SESSION['noti_cart']) && $_SESSION['noti_cart'] == 1) { ?>
+        <div class="noti-success">Thêm Thành Công</div>;
+    <?php
+    $_SESSION['noti_cart'] = 0; // Đặt lại thông báo về 0 sau khi hiển thị
+    }
+    ?>
 
     <!-- Shop Section Begin -->
     <section class="shop spad">
@@ -239,46 +269,46 @@
                     </div>
                     <!-- Product -->
                     <div class="row">
-    <?php if($products): ?>
-        <?php foreach($products as $shop): ?>
-        <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="product__item">
-                <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?= $shop['image'] ?>">
-                    <ul class="product__hover">
-                        <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
-                        <li><a href="#"><img src="./assets/images/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                        <li><a href="#"><img src="./assets/images/icon/search.png" alt=""></a></li>
-                    </ul>
-                </div>
-                <div class="product__item__text">
-                    <h6><?= $shop['title'] ?></h6>
-                    <!-- Form to Add to Cart -->
-                    <form method="post" action="?act=spCart&id=<?= $shop['product_id'] ?>">
-                        <input type="hidden" name="product_id" value="<?= $shop['product_id'] ?>" />
-                       <a href="" class="add-cart"> <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button></a>
-                       <!-- <button name="btn_add"> <a href="?act=spCart" class="add-cart">+ Add To Cart</a></button> -->
-                    </form>
-                    <div class="rating">
-                        <i class="fa fa-star-o"></i>
-                        <i class="fa fa-star-o"></i>
-                        <i class="fa fa-star-o"></i>
-                        <i class="fa fa-star-o"></i>
-                        <i class="fa fa-star-o"></i>
+                        <?php if ($products): ?>
+                            <?php foreach ($products as $shop): ?>
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?= $shop['image'] ?>">
+                                            <ul class="product__hover">
+                                                <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
+                                                <li><a href="#"><img src="./assets/images/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                                                <li><a href="#"><img src="./assets/images/icon/search.png" alt=""></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text">
+                                            <h6><?= $shop['title'] ?></h6>
+                                            <!-- Form to Add to Cart -->
+                                            <form method="post" action="?act=spCart&id=<?= $shop['product_id'] ?>">
+                                                <input type="hidden" name="product_id" value="<?= $shop['product_id'] ?>" />
+                                                <a href="" class="add-cart"> <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button></a>
+                                                <!-- <button name="btn_add"> <a href="?act=spCart" class="add-cart">+ Add To Cart</a></button> -->
+                                            </form>
+                                            <div class="rating">
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <h5><?= number_format($shop['price']) . 'đ' ?></h5>
+                                            <div class="product__color__select">
+                                                <label for="pc-4"><input type="radio" id="pc-4"></label>
+                                                <label class="active black" for="pc-5"><input type="radio" id="pc-5"></label>
+                                                <label class="grey" for="pc-6"><input type="radio" id="pc-6"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có sản phẩm nào</p>
+                        <?php endif; ?>
                     </div>
-                    <h5><?= number_format($shop['price']) . 'đ' ?></h5>
-                    <div class="product__color__select">
-                        <label for="pc-4"><input type="radio" id="pc-4"></label>
-                        <label class="active black" for="pc-5"><input type="radio" id="pc-5"></label>
-                        <label class="grey" for="pc-6"><input type="radio" id="pc-6"></label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>Không có sản phẩm nào</p>
-    <?php endif; ?>
-</div>
 
                     <!-- End Product -->
                     <div class="row">

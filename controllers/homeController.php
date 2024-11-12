@@ -28,18 +28,17 @@ class homeController
         $products = $this->homeModel->Products();
         require_once 'views/shop.php';
     }
+    
     public function spCard($id) {
-        // Lấy sản phẩm từ homeModel
+        // Lấy sản phẩm từ cơ sở dữ liệu
+        // echo $_GET['id'];
         $row = $this->homeModel->spCart($id);
     
-        // Kiểm tra nếu không tìm thấy sản phẩm
-        if (!$row) {
-            echo "Sản phẩm không tồn tại!";
-            return;
-        }
+        // Kiểm tra nếu không có qty thì set mặc định là 1
         if (!isset($row['qty'])) {
             $row['qty'] = 1;
         }
+    
         // Kiểm tra nếu người dùng nhấn nút "Add To Cart"
         if (isset($_POST['btn_add'])) {
             // Kiểm tra xem giỏ hàng đã tồn tại trong session hay chưa
@@ -54,15 +53,40 @@ class homeController
                 $_SESSION['carts'][$id] = $row;  // Thêm sản phẩm mới vào giỏ
                 $_SESSION['carts'][$id]['qty'] = 1;
             }
+            $_SESSION['noti_cart'] = 1;
+        }
+        header("location: ?act=shop");
+        // Hiển thị trang giỏ hàng
+        // require_once 'views/shopping-cart.php';
+    }
+    public function updateQuantity() {
+        if (isset($_POST['product_id']) && isset($_POST['action'])) {
+            $product_id = $_POST['product_id'];
+            $action = $_POST['action'];
     
-            // In ra giỏ hàng để kiểm tra
-            echo "<pre>";
-            print_r($_SESSION['carts']);
-            echo "</pre>";
+            // Kiểm tra xem sản phẩm có trong giỏ hàng không
+            if (isset($_SESSION['carts'][$product_id])) {
+                if ($action === 'increase') {
+                    // Tăng số lượng sản phẩm
+                    $_SESSION['carts'][$product_id]['qty'] += 1;
+                } elseif ($action === 'decrease') {
+                    // Giảm số lượng sản phẩm
+                    if($_SESSION['carts'][$product_id]['qty'] > 1){
+
+                        $_SESSION['carts'][$product_id]['qty'] -= 1;
+                    }
+    
+                    // Nếu số lượng giảm về 0, xóa sản phẩm khỏi giỏ hàng
+                    // if ($_SESSION['carts'][$product_id]['qty'] <= 0) {
+                    //     unset($_SESSION['carts'][$product_id]);
+                    // }
+                }
+            }
         }
     
-        // Hiển thị trang giỏ hàng
-        require_once 'views/shopping-cart.php';
+        // Sau khi cập nhật số lượng, chuyển hướng lại trang giỏ hàng
+        header("Location: ?act=Cart");
+        exit();
     }
     
     

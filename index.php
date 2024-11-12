@@ -1,6 +1,6 @@
 <?php
 session_start();
-session_destroy();
+// session_destroy();
 
 require_once 'commons/function.php';
 require_once 'controllers/homeController.php';
@@ -13,6 +13,7 @@ match($act) {
     '/' => (new homeController())->home(),
     'shop' => (new homeController())->shop(),
     'spCart' => (new homeController())->spCard($id),
+    'Cart' => (new homeModel())->Card(),
+    'update_quantity' => (new homeController())->updateQuantity(),
 };
-
 ?>
