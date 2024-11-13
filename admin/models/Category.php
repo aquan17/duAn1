@@ -1,36 +1,42 @@
 <?php
-// models/Category.php
+require_once "../commons/function.php";
 
 class Category {
-    private $pdo;
+    public $conn = null;
 
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
+    public function __construct() {
+        $this->conn = connectDB();
     }
 
     public function all() {
-        $stmt = $this->pdo->query("SELECT * FROM categories");
+        $sql = "SELECT * FROM categories ORDER BY category_id DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function find($id) {
-        $stmt = $this->pdo->prepare("SELECT * FROM categories WHERE category_id = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    public function delete($id) {
+        $sql = "DELETE FROM categories WHERE category_id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $id]);
     }
 
     public function insert($data) {
-        $stmt = $this->pdo->prepare("INSERT INTO categories (category_name) VALUES (:category_name)");
-        $stmt->execute(['category_name' => $data['category_name']]);
+        $sql = "INSERT INTO categories (category_name) VALUES (:category_name)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($data);
     }
 
-    public function update($id, $data) {
-        $stmt = $this->pdo->prepare("UPDATE categories SET category_name = :category_name WHERE category_id = :id");
-        $stmt->execute(['category_name' => $data['category_name'], 'id' => $id]);
+    public function update($data) {
+        $sql = "UPDATE categories SET category_name = :category_name WHERE category_id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($data);
     }
 
-    public function delete($id) {
-        $stmt = $this->pdo->prepare("DELETE FROM categories WHERE category_id = ?");
-        $stmt->execute([$id]);
+    public function find_one($id) {
+        $sql = "SELECT * FROM categories WHERE category_id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
