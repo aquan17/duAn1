@@ -1,62 +1,81 @@
 <?php
-class homeModel{
+class homeModel
+{
     public $conn;
-    function __construct(){
+    function __construct()
+    {
         $this->conn = connectDB();
     }
-    function allProduct() {
+    function allProduct()
+    {
         $sql = "SELECT * FROM products ORDER BY product_id DESC";
         return $this->conn->query($sql);
     }
 
-    function Product() {
+    function Product()
+    {
         $sql = "SELECT * FROM products ORDER BY product_id ASC LIMIT 8";
         return $this->conn->query($sql);
     }
-    function Products() {
+    function Products()
+    {
         $sql = "SELECT * FROM products ORDER BY product_id";
         return $this->conn->query($sql);
     }
 
-    function findProductById($id){
-        $sql = "SELECT * FROM products WHERE product_id = $id";
-        return $this->conn->query($sql)->fetch();
+    // homeModel.php
+    public function findProductById($id)
+    {
+        $sql = "SELECT * FROM products WHERE product_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);  // Truyền id vào câu lệnh SQL
+        return $stmt->fetch();  // Trả về dữ liệu sản phẩm nếu tìm thấy
+        
     }
-    function getShirt() {
+
+    function getShirt()
+    {
         $sql = "SELECT * FROM products WHERE category_id = 1 ORDER BY product_id DESC";
         return $this->conn->query($sql);
     }
 
 
-    function getJeans() {
+    function getJeans()
+    {
         $sql = "SELECT * FROM products WHERE category_id = 2 ORDER BY product_id DESC";
         return $this->conn->query($sql);
     }
 
-    function getJacket() {
+    function getJacket()
+    {
         $sql = "SELECT * FROM products WHERE category_id = 3 ORDER BY product_id DESC";
         return $this->conn->query($sql);
     }
-    function getT_shirt() {
+    function getT_shirt()
+    {
         $sql = "SELECT * FROM products WHERE category_id = 4 ORDER BY product_id DESC";
         return $this->conn->query($sql);
     }
-    function getHoodie() {
+    function getHoodie()
+    {
         $sql = "SELECT * FROM products WHERE category_id = 5 ORDER BY product_id DESC";
         return $this->conn->query($sql);
     }
-    function getNewArrivals() {
+    function getNewArrivals()
+    {
         $sql = "SELECT * FROM products ORDER BY product_id ASC LIMIT 4";
         return $this->conn->query($sql)->fetchAll();
     }
-    function spCart($id){
+    function spCart($id)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM products WHERE product_id = ?");
         $stmt->execute([$id]);
-    
+
         // Ensure product is found
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
-    function Card() {
+    function Card()
+    {
         // Kiểm tra nếu 'carts' đã tồn tại trong $_SESSION
         if (isset($_SESSION['carts'])) {
             $row = $_SESSION['carts'];
@@ -64,11 +83,11 @@ class homeModel{
             // Nếu không tồn tại, khởi tạo $row như một mảng rỗng
             $row = [];
         }
-    
+
         require_once 'views/shopping-cart.php';
     }
-    
-    
+
+
 
     // Fetch limited products for "Hot Sales" (random selection)
     // function getHotSales() {
@@ -81,4 +100,3 @@ class homeModel{
     //     return $this->conn->query($sql)->fetchAll();
     // }
 }
-?>
