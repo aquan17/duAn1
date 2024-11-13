@@ -1,21 +1,27 @@
 <?php
-
-
 require_once "../commons/function.php";
+require_once "models/Product.php";
 require_once "models/Category.php";
+require_once "controllers/ProductController.php";
 require_once "controllers/CategoryController.php";
-
-// Tạo kết nối PDO bằng hàm connectDB()
-$pdo = connectDB(); // Gọi hàm connectDB để lấy kết nối PDO
+require_once "controllers/dashboardController.php";
 
 $ctl = $_GET['ctl'] ?? "";
 
-match($ctl) {
-    "" => (new CategoryController($pdo))->index(),
-    "delete" => (new CategoryController($pdo))->delete($_GET['id'] ?? 0),
-    "add" => (new CategoryController($pdo))->create(),
-    "store" => (new CategoryController($pdo))->store(),
-    "edit" => (new CategoryController($pdo))->edit($_GET['id'] ?? 0),
-    "update" => (new CategoryController($pdo))->update($_GET['id'] ?? 0),
+
+match("$ctl") {
+    ""=> (new dashboardController)->dashboard(),
+    "product-list" => (new ProductController())->list(),
+    "product-add" => (new ProductController())->add(),
+    "product-store" => (new ProductController())->store(),
+    "product-edit" => (new ProductController())->edit(),
+    "product-delete" => (new ProductController())->delete(),
     
+    "category-list" => (new CategoryController())->list(),
+    "category-add" => (new CategoryController())->add(),
+    "category-store" => (new CategoryController())->store(),
+    "category-edit" => (new CategoryController())->edit(),
+    "category-delete" => (new CategoryController())->delete(),
+    
+    default => view('404'),
 };
