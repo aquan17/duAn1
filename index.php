@@ -5,6 +5,8 @@ session_start();
 require_once 'commons/function.php';
 require_once 'controllers/homeController.php';
 require_once 'models/homeModel.php';
+require_once 'models/accModel.php';
+require_once 'controllers/accController.php';
 
 // Lấy id và act từ URL
 $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
@@ -36,9 +38,14 @@ switch ($act) {
             echo 'Product ID is missing.';
         }
         break;
+    case 'checkout':
+        (new homeController())->checkout();
+    case 'login':
+        (new accController())->login();
+    case 'logout':
+        (new accController())->logout();
     default:
         // Trường hợp mặc định nếu không có match
         echo 'Page not found.';
         break;
 }
-?>

@@ -50,8 +50,13 @@
                     <a href="#" id="searchIcon" class="search-switch"><img src="./assets/images/icon/search.png" alt=""></a>
                     <a href="#"><img src="./assets/images/icon/heart.png" alt=""></a>
                     <a href="?act=Cart"><img src="./assets/images/icon/cart.png" alt=""></a>
-                    <a href="#" id="loginBtn"><img src="./assets/images/icon/user1.png" alt=""></a>
+                    <a href="" id="loginBtn"><img src="./assets/images/icon/user1.png" alt=""></a>
                     <?php require_once 'login.php' ?>
+                    <?php if (isset($_SESSION['user'])) { ?>
+                        <p>Xin Chào, <?php echo htmlspecialchars($_SESSION['user']); ?></p>
+                    <?php } ?>
+
+
                 </div>
                 <div id="searchContainer" style="display: none;">
                     <input type="text" id="searchInput" placeholder="Search for products..." />

@@ -107,7 +107,10 @@
                         <div class="col-lg-3 col-md-6 col-sm-6 mix new-arrivals">
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?php echo htmlspecialchars($product['image']); ?>">
-                                    <span class="label">New</span>
+                                <a href="?act=details&id=<?= $product['product_id'] ?>">
+                                                <img src="./assets/images/product/<?= $product['image'] ?>" alt="Product Image" >
+                                            </a>
+                                <span class="label">New</span>
                                     <ul class="product__hover">
                                         <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
                                         <li><a href="#"><img src="./assets/images/icon/compare.png" alt=""> <span>Compare</span></a></li>

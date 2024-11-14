@@ -65,9 +65,9 @@
 .login-popup input {
     border: none;
     min-width: 350px;
-    color: white;
+    color: black;
     padding: 10px;
-    background-color: #333333;
+    background-color: #aaa;
     outline: none;
     border-radius: 5px;
 }

@@ -21,8 +21,8 @@ class homeController
         $newArrivals = $this->homeModel->getNewArrivals(); // Lấy sản phẩm mới
         // $hotSales = $this->homeModel->getHotSales(); // Lấy sản phẩm hot sales
         // $bestSellers = $this->homeModel->getBestSellers(); // Fetch Best Sellers
-        require_once 'views/checkout.php'; // Bao gồm view
-        // require_once 'views/shop-details.php'; // Bao gồm view
+        // require_once 'views/checkout.php'; // Bao gồm view
+        require_once 'views/home.php'; // Bao gồm view
     }
     function Shop()
     {
@@ -77,7 +77,7 @@ class homeController
                     // Giảm số lượng sản phẩm
                     if ($_SESSION['carts'][$product_id]['qty'] > 1) {
 
-                        $_SESSION['carts'][$product_id]['qty'] -= 1;
+                        $_SESSION['carts'][$product_id]['qty'] --;
                     }
 
                     // Nếu số lượng giảm về 0, xóa sản phẩm khỏi giỏ hàng
@@ -106,4 +106,20 @@ class homeController
         // $s_details;
         // echo "</pre>";
     }
+    public function checkout()
+{
+    // Lấy dữ liệu sản phẩm trong giỏ hàng từ session
+    $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
+    $totalPrice = 0;
+    foreach ($productsInCart as $value) {
+        $totalPrice += $value['price'] * $value['qty']; // Tính tổng tiền
+    }
+
+    // Lưu tổng giá trị vào session nếu cần
+    $_SESSION['sum_price'] = $totalPrice;
+
+    // Truyền dữ liệu giỏ hàng vào view thanh toán
+    require_once 'views/checkout.php';
+}
+
 }
