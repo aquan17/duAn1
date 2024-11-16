@@ -16,6 +16,49 @@
     <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/search.css">
+    <style>
+   
+
+
+/* Basic styling for the login button */
+#loginBtn {
+    
+    z-index: 10; /* Ensure it stays above other elements */
+}
+
+
+/* Initially hide the dropdown text */
+#loginBtn .dropdown-text {
+    display: none;  /* Initially hidden */
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background-color: black;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 10;  /* Ensure the dropdown text appears above other elements */
+    opacity: 0;  /* Make the dropdown invisible by default */
+    visibility: hidden; /* Make it hidden until shown */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Show dropdown text when hovering over the login button */
+#loginBtn:hover .dropdown-text,
+#loginBtn .dropdown-text:hover {
+    display: block;
+    opacity: 1;  /* Hiển thị dropdown-text */
+    visibility: visible;  /* Đảm bảo dropdown-text hiển thị */
+}
+
+/* Optional: Faded effect on icon when clicked or hovered */
+#loginBtn:hover img {
+    opacity: 0.8;
+}
+
+</style>
 </head>
 
 <body>
@@ -50,13 +93,15 @@
                     <a href="#" id="searchIcon" class="search-switch"><img src="./assets/images/icon/search.png" alt=""></a>
                     <a href="#"><img src="./assets/images/icon/heart.png" alt=""></a>
                     <a href="?act=Cart"><img src="./assets/images/icon/cart.png" alt=""></a>
-                    <a href="" id="loginBtn"><img src="./assets/images/icon/user1.png" alt=""></a>
+                    <a href="#" id="loginBtn">
+    <img src="./assets/images/icon/user1.png" alt="">
+    <span class="dropdown-text">Đăng Nhập</span>
+</a>
+
+                  
+                
+            
                     <?php require_once 'login.php' ?>
-                    <?php if (isset($_SESSION['user'])) { ?>
-                        <p>Xin Chào, <?php echo htmlspecialchars($_SESSION['user']); ?></p>
-                    <?php } ?>
-
-
                 </div>
                 <div id="searchContainer" style="display: none;">
                     <input type="text" id="searchInput" placeholder="Search for products..." />

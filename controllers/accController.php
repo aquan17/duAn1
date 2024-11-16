@@ -35,6 +35,52 @@ class accController
         header("Location: ?act=/");
         exit();
     }
+    function insertUser()
+    {
+        
+        if (isset($_POST['btn_add'])) {
+            $name = $_POST['user'];
+            $password = $_POST['pass'];
+            $email = $_POST['email'];
+            $phone = $_POST['phone'];
+            $dchi = $_POST['address'];
+            
+
+            // Kiểm tra các giá trị đầu vào
+            if (empty($name) || empty($password) || empty($email) || empty($phone) || empty($dchi)) {
+                echo "Vui lòng điền đầy đủ thông tin.";
+                return;
+            }
+
+            if ($this->accModel->insertUser($name, $password, $email, $phone, $dchi)) {
+                echo "<script>alert('Tạo tài khoản thành công');</script>";
+                header("Location: ?act=/");
+                
+            } else {
+                echo "Lỗi khi tạo mới user vào cơ sở dữ liệu.";
+            }
+        }
+        require_once 'views/login.php';
+    }
+    
+function forgotPassword($data)
+{
+    $email = $data['email'];
+
+    if (empty($email)) {
+        echo "Vui lòng nhập email khôi phục.";
+        return;
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Email không hợp lệ.";
+        return;
+    }
+
+    // Thêm logic gửi email hoặc cập nhật mật khẩu tại đây
+    echo "Hướng dẫn khôi phục mật khẩu đã được gửi đến email của bạn.";
 }
+}
+
 
 ?>
