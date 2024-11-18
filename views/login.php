@@ -27,6 +27,7 @@
     padding: 20px;
     border-radius: 8px;
     width: 500px;
+    margin-top: 100px;
     text-align: center;
 }
 
@@ -133,7 +134,10 @@
 }
 
 .login-popup #login_swich:checked~div:not(:nth-of-type(1)),
-.login-popup #login_swich:checked~#confirm {
+.login-popup #login_swich:checked~#confirm,
+.login-popup #login_swich:checked~#email, 
+.login-popup #login_swich:checked~#phone,
+.login-popup #login_swich:checked~#address {
     display: none;
 }
 
@@ -150,6 +154,7 @@
     display: inline;
 }
 
+
 </style>
 
 <body>
@@ -159,32 +164,71 @@
     <div class="popup-content">
         <span id="closeBtn" class="close-btn">&times;</span>
         <h2>Đăng Nhập</h2>
-        <form method="post">
-            <input type="radio" id="login_swich" name="swich" checked />
-            <input type="radio" id="signup_swich" name="swich" />
-            <input type="radio" id="forgot_swich" name="swich" />
-            <span class="label_wrap">
-                <label for="login_swich">Log in</label>
-                <label for="signup_swich">Sign up</label>
-                <label for="forgot_swich">Forgot Password</label>
-            </span>
-            <input placeholder="Username" name="user" />
-            <input placeholder="Password" type="password" name="pass" />
-            <input placeholder="Confirm password" type="password" id="confirm" />
-            <input placeholder="Recovery email" type="password" id="forgot" />
-            <div class="form_btns">
-                <a><label for="forgot_swich">Forgot password?</label></a>
-                <button id="login_btn">Log in</button>
-                <a><label for="signup_swich">Create account</label></a>
-            </div>
-            <div class="form_btns">
-                <button id="signup_btn">Sign up</button>
-                <a><label for="login_swich">Login</label></a>
-            </div>
-            <div class="form_btns">
-                <button id="forgot_btn">Reset Password</button>
-            </div>
-        </form>
+
+        <!-- <form method="post" action="?act=signup">
+    <input type="radio" id="login_swich" name="swich" checked />
+    <input type="radio" id="signup_swich" name="swich" />
+    <input type="radio" id="forgot_swich" name="swich" />
+    <span class="label_wrap">
+        <label for="login_swich">Đăng Nhập</label>
+        <label for="signup_swich">Đăng Ký</label>
+        <label for="forgot_swich">Forgot Password</label>
+    </span>
+    <input placeholder="Username" name="user" />
+    <input placeholder="Password" type="password" name="pass" />
+    <input placeholder="Confirm password" type="password" id="confirm" />
+
+    <input placeholder="Email" type="email" name="email" id="email" />
+    <input placeholder="Số điện thoại" type="text" name="phone" id="phone" />
+    <input placeholder="Địa chỉ" type="text" name="address" id="address" />
+    <input placeholder="Recovery email" type="password" id="forgot" />
+    <div class="form_btns">
+        <a><label for="forgot_swich">Forgot password?</label></a>
+        <button id="login_btn">Đăng Nhập</button>
+        <a><label for="signup_swich">Create account</label></a>
+    </div>
+    <div class="form_btns">
+        <button id="signup_btn" name="btn_add">Đăng Ký</button>
+        <a><label for="login_swich">Đăng Nhập</label></a>
+    </div>
+    <div class="form_btns">
+        <button id="forgot_btn">Reset Password</button>
+    </div>
+</form> -->
+<form method="post" action="?act=insertUser ">
+    <input type="radio" id="login_swich" name="swich" value="login" checked />
+    <input type="radio" id="signup_swich" name="swich" value="signup" />
+    <input type="radio" id="forgot_swich" name="swich" value="forgot" />
+
+    <span class="label_wrap">
+        <label for="login_swich">Đăng Nhập</label>
+        <label for="signup_swich">Đăng Ký</label>
+        <label for="forgot_swich">Forgot Password</label>
+    </span>
+
+    <input placeholder="Username" name="user" />
+    <input placeholder="Password" type="password" name="pass" />
+    <input placeholder="Email" type="email" name="email" id="email" />
+    <input placeholder="Số điện thoại" type="text" name="phone" id="phone" />
+    <input placeholder="Địa chỉ" type="text" name="address" id="address" />
+    <!-- <input placeholder="Confirm password" type="password" id="confirm" /> -->
+
+    <div class="form_btns">
+        <button id="login_btn" type="submit">Đăng Nhập</button>
+        <!-- <button id="forgot_btn" type="submit">Khôi Phục</button> -->
+        <a><label for="forgot_swich">Forgot password?</label></a>
+    </div>
+     <div class="form_btns">
+        <button id="signup_btn" name="btn_add">Đăng Ký</button>
+        <a><label for="login_swich">Đăng Nhập</label></a>
+    </div>
+    <div class="form_btns">
+        <button id="forgot_btn">Reset Password</button>
+        <a><label for="login_swich">Đăng Nhập</label></a>
+    </div>
+</form>
+
+
     </div>
 </div>
 
@@ -206,11 +250,11 @@
         }
 
         // Đóng popup khi click ra ngoài
-        window.onclick = function(event) {
-            if (event.target == popup) {
-                popup.style.display = 'none';
-            }
-        }
+        // window.onclick = function(event) {
+        //     if (event.target == popup) {
+        //         popup.style.display = 'none';
+        //     }
+        // }
     </script>
 </body>
 

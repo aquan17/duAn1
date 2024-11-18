@@ -31,21 +31,26 @@ switch ($act) {
         break;
     case 'details':
         if ($id) {
-            // Truyền id vào phương thức shop_details
             (new homeController())->shop_details($id);
         } else {
-            // Xử lý trường hợp không có id
             echo 'Product ID is missing.';
         }
         break;
     case 'checkout':
         (new homeController())->checkout();
+        break;
     case 'login':
         (new accController())->login();
+        break;
     case 'logout':
         (new accController())->logout();
+        break;
+    case 'insertUser':
+        (new accController())->insertUser();
+        break;
     default:
-        // Trường hợp mặc định nếu không có match
         echo 'Page not found.';
         break;
 }
+?>
+
