@@ -12,7 +12,7 @@ class accController
 
     function login()
     {
-        // require_once 'views/login.php'; // Gọi giao diện đăng nhập
+        
 
         if (isset($_POST['swich'])) { // Kiểm tra xem nút đăng nhập đã được chọn chưa
             $user = $_POST['user'];
@@ -27,6 +27,7 @@ class accController
                 echo "<script>alert('Không đăng nhập thành công!');</script>";
             }
         }
+        require_once 'views/login.php'; // Gọi giao diện đăng nhập
     }
 
     function logout()
@@ -36,33 +37,45 @@ class accController
         exit();
     }
     function insertUser()
-    {
-        
-        if (isset($_POST['btn_add'])) {
-            $name = $_POST['user'];
-            $password = $_POST['pass'];
-            $email = $_POST['email'];
-            $phone = $_POST['phone'];
-            $dchi = $_POST['address'];
-            
+{
+    if (isset($_POST['btn_add'])) {
+        $name = $_POST['user'];
+        $password = $_POST['pass'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $dchi = $_POST['address'];
 
-            // Kiểm tra các giá trị đầu vào
-            if (empty($name) || empty($password) || empty($email) || empty($phone) || empty($dchi)) {
-                echo "Vui lòng điền đầy đủ thông tin.";
-                return;
-            }
-
-            if ($this->accModel->insertUser($name, $password, $email, $phone, $dchi)) {
-                echo "<script>alert('Tạo tài khoản thành công');</script>";
-                header("Location: ?act=/");
-                
-            } else {
-                echo "Lỗi khi tạo mới user vào cơ sở dữ liệu.";
-            }
+        // Kiểm tra các giá trị đầu vào
+        if (empty($name) || empty($password) || empty($email) || empty($phone) || empty($dchi)) {
+            echo "Vui lòng điền đầy đủ thông tin.";
+            return;
         }
-        require_once 'views/login.php';
+
+        if ($this->accModel->insertUser($name, $password, $email, $phone, $dchi)) {
+            echo "<script>alert('Tạo tài khoản thành công');</script>";
+            echo "<script>window.location.href = '?act=/';</script>";
+            exit(); // Stop further script execution
+        } else {
+            echo "Lỗi khi tạo mới user vào cơ sở dữ liệu.";
+        }
     }
-    
+    require_once 'views/login.php';
+}
+
+    function handleAuth()
+    {
+        $actionType = $_POST['actionType'] ?? 'login';
+
+        if ($actionType === 'login') {
+            $this->login();
+        } elseif ($actionType === 'signup') {
+            $this->insertUser();
+        } elseif ($actionType === 'forgot') {
+            $this->forgotPassword($_POST);
+        } else {
+            echo "Hành động không hợp lệ!";
+        }
+    }
 function forgotPassword($data)
 {
     $email = $data['email'];
