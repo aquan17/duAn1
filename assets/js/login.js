@@ -13,24 +13,15 @@
             function setActionType(action) {
             document.getElementById('actionType').value = action;
         }
-            // Lấy các phần tử cần thiết
-            const loginBtn = document.getElementById('loginBtn');
-            const popup = document.getElementById('loginPopup');
-            const closeBtn = document.getElementById('closeBtn');
-    
-            // Mở popup khi nhấn nút đăng nhập
-            loginBtn.onclick = function() {
-                popup.style.display = 'block';
-            }
-    
-            // Đóng popup khi nhấn vào nút đóng
-            closeBtn.onclick = function() {
-                popup.style.display = 'none';
-            }
-    
-            // Đóng popup khi click ra ngoài
-            // window.onclick = function(event) {
-            //     if (event.target == popup) {
-            //         popup.style.display = 'none';
-            //     }
-            // }
+        const container = document.getElementById('container');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
+        
+        registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
+        });
+        
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
+        });
+        

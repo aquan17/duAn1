@@ -86,7 +86,40 @@ class homeModel
 
         require_once 'views/shopping-cart.php';
     }
-
+    public function createOrder($first_name, $last_name, $address, $city, $phone, $email, $note, $totalPrice)
+    {
+        $sql = "INSERT INTO orders (first_name, last_name, address, city, phone, email, note, total_price, order_date)
+                VALUES (:first_name, :last_name, :address, :city, :phone, :email, :note, :total_price, NOW())";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':first_name', $first_name);
+        $stmt->bindParam(':last_name', $last_name);
+        $stmt->bindParam(':address', $address);
+        $stmt->bindParam(':city', $city);
+        $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':note', $note);
+        $stmt->bindParam(':total_price', $totalPrice);
+        
+        $stmt->execute();
+    
+        // Trả về ID của đơn hàng vừa tạo
+        return $this->conn->lastInsertId();
+    }
+    public function createOrderDetails($order_id, $product_id, $qty, $price)
+    {
+        $sql = "INSERT INTO order_details (order_id, product_id, quantity, price)
+                VALUES (:order_id, :product_id, :quantity, :price)";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        $stmt->bindParam(':product_id', $product_id);
+        $stmt->bindParam(':quantity', $qty);
+        $stmt->bindParam(':price', $price);
+    
+        $stmt->execute();
+    }
+        
 
 
     // Fetch limited products for "Hot Sales" (random selection)

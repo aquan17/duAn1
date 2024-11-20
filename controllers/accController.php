@@ -12,11 +12,9 @@ class accController
 
     function login()
     {
-        
-
-        if (isset($_POST['swich'])) { // Kiểm tra xem nút đăng nhập đã được chọn chưa
-            $user = $_POST['user'];
-            $pass = $_POST['pass'];
+        if (isset($_POST['btn_login'])) { // Kiểm tra xem nút đăng nhập đã được chọn chưa
+            $user = $_POST['name'];  // Changed from 'user' to 'name' based on your HTML input
+            $pass = $_POST['password'];  // Changed from 'pass' to 'password'
 
             if ($this->accModel->checkAcc($user, $pass)) { // Kiểm tra thông tin đăng nhập
                 $_SESSION['user'] = $user;
@@ -36,39 +34,40 @@ class accController
         header("Location: ?act=/");
         exit();
     }
+
     function insertUser()
-{
-    if (isset($_POST['btn_add'])) {
-        $name = $_POST['user'];
-        $password = $_POST['pass'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        $dchi = $_POST['address'];
+    {
+        if (isset($_POST['btn_add'])) {
+            $name = $_POST['user'];  // Changed from 'name' to 'user' based on your HTML input
+            $password = $_POST['pass'];  // Changed from 'password' to 'pass'
+            $email = $_POST['email'];
+            $phone = $_POST['phone'];
+            $dchi = $_POST['address'];
 
-        // Kiểm tra các giá trị đầu vào
-        if (empty($name) || empty($password) || empty($email) || empty($phone) || empty($dchi)) {
-            echo "Vui lòng điền đầy đủ thông tin.";
-            return;
-        }
+            // Kiểm tra các giá trị đầu vào
+            if (empty($name) || empty($password) || empty($email) || empty($phone) || empty($dchi)) {
+                echo "Vui lòng điền đầy đủ thông tin.";
+                return;
+            }
 
-        if ($this->accModel->insertUser($name, $password, $email, $phone, $dchi)) {
-            echo "<script>alert('Tạo tài khoản thành công');</script>";
-            echo "<script>window.location.href = '?act=/';</script>";
-            exit(); // Stop further script execution
-        } else {
-            echo "Lỗi khi tạo mới user vào cơ sở dữ liệu.";
+            if ($this->accModel->insertUser($name, $password, $email, $phone, $dchi)) {
+                echo "<script>alert('Tạo tài khoản thành công');</script>";
+                echo "<script>window.location.href = '?act=/';</script>";
+                exit(); // Stop further script execution
+            } else {
+                echo "Lỗi khi tạo mới user vào cơ sở dữ liệu.";
+            }
         }
+        require_once 'views/login.php'; // Đảm bảo luôn gọi form login sau khi xử lý
     }
-    require_once 'views/login.php';
-}
 
     function handleAuth()
     {
         $actionType = $_POST['actionType'] ?? 'login';
 
-        if ($actionType === 'login') {
+        if ($actionType === 'btn_login') {
             $this->login();
-        } elseif ($actionType === 'signup') {
+        } elseif ($actionType === 'btn_add') {
             $this->insertUser();
         } elseif ($actionType === 'forgot') {
             $this->forgotPassword($_POST);
@@ -76,24 +75,26 @@ class accController
             echo "Hành động không hợp lệ!";
         }
     }
-function forgotPassword($data)
-{
-    $email = $data['email'];
 
-    if (empty($email)) {
-        echo "Vui lòng nhập email khôi phục.";
-        return;
+    function forgotPassword($data)
+    {
+        $email = $data['email'];
+
+        if (empty($email)) {
+            echo "Vui lòng nhập email khôi phục.";
+            return;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "Email không hợp lệ.";
+            return;
+        }
+
+        // Thêm logic gửi email hoặc cập nhật mật khẩu tại đây
+        echo "Hướng dẫn khôi phục mật khẩu đã được gửi đến email của bạn.";
     }
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Email không hợp lệ.";
-        return;
-    }
-
-    // Thêm logic gửi email hoặc cập nhật mật khẩu tại đây
-    echo "Hướng dẫn khôi phục mật khẩu đã được gửi đến email của bạn.";
 }
-}
+
 
 
 ?>

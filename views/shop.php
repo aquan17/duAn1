@@ -7,7 +7,7 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <title>Shop</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -272,8 +272,7 @@
                                 <a href="" class="add-cart"> <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button></a>
                             </form>
                         <?php else: ?>
-                            <a href="#" id="loginBtn" class="add-cart"><button style="border: none;">+ Please Log In to Add To Cart</button></a> <!-- Redirect to login -->
-                            <?php require_once 'login.php'; ?>
+                            <a href="?act=login" id="loginBtn" class="add-cart"><button style="border: none;">+ Please Log In to Add To Cart</button></a> <!-- Redirect to login -->
                             <?php endif; ?>
 
                         <div class="rating">

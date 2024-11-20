@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ADMIN</title>
     <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <!-- My CSS -->
@@ -40,6 +40,12 @@
                 <a href="?act=user">
                     <i class='bx bxs-user'></i>
                     <span class="text">Quản Lý Khách Hàng</span>
+                </a>
+            </li>
+            <li>
+                <a href="?ctl=order">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Quản Lý Đơn Hàng</span>
                 </a>
             </li>
             <li>

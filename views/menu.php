@@ -43,6 +43,12 @@
                         </li>
                         <li><a href="">Blog</a></li>
                         <li><a href="">Contacts</a></li>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
+        <li>
+            <a href="./admin/?ctl="><img src="./assets/images/admin.png" alt="" width="40px"></a>
+        </li>
+    <?php endif; ?>
+                        
                     </ul>
                 </nav>
             </div>
@@ -60,11 +66,11 @@
                         </div>
                     <?php else: ?>
                         <!-- Hiển thị nút Đăng nhập khi chưa đăng nhập -->
-                        <a href="#" id="loginBtn">
+                        <a href="?act=login" id="loginBtn">
                             <img src="./assets/images/icon/user1.png" alt="User Icon">
                             <!-- <span class="dropdown-text">Đăng Nhập</span> -->
                         </a>
-                        <?php require_once 'login.php'; ?>
+                        
                     <?php endif; ?>
 
                 </div>
