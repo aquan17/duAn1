@@ -37,7 +37,7 @@
                 </a>
             </li>
             <li>
-                <a href="?act=user">
+                <a href="index.php?ctl=user-list">
                     <i class='bx bxs-user'></i>
                     <span class="text">Quản Lý Khách Hàng</span>
                 </a>
@@ -51,7 +51,7 @@
         </ul>
         <ul class="side-menu">
             <li>
-                <a href="views/login.php">
+                <a href="index.php?ctl=user-list">
                     <i class='bx bxs-cog'></i>
                     <span class="text">Settings</span>
                 </a>
