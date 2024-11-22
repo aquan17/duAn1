@@ -2,7 +2,7 @@
 // Hàm connection: kết nối đến CSDL
 function connectDB() {
     $host = "localhost";
-    $dbname = "dan1"; 
+    $dbname = "duan1"; 
     $username = "root";
     $password = "";
     $port = "3306";

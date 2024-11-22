@@ -48,6 +48,9 @@ switch ($act) {
     case 'insertUser':
         (new accController())->insertUser();
         break;
+    case 'auth':
+            (new accController())->handleAuth();
+            break;
     default:
         echo 'Page not found.';
         break;

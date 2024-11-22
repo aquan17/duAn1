@@ -108,6 +108,39 @@ class homeController
     }
     public function checkout()
 {
+    // Kiểm tra nếu người dùng chưa điền đầy đủ thông tin
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Lấy dữ liệu từ form
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $address = $_POST['address'];
+        $city = $_POST['city'];
+        $phone = $_POST['phone'];
+        $email = $_POST['email'];
+        $note = $_POST['note'];
+
+        // Kiểm tra các trường bắt buộc
+        $errors = [];
+        if (empty($first_name)) $errors[] = 'First name is required.';
+        if (empty($last_name)) $errors[] = 'Last name is required.';
+        if (empty($address)) $errors[] = 'Address is required.';
+        if (empty($city)) $errors[] = 'City is required.';
+        if (empty($phone)) $errors[] = 'Phone number is required.';
+        if (empty($email)) $errors[] = 'Email is required.';
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format.';
+
+        // Nếu có lỗi, hiển thị thông báo lỗi và không lưu đơn hàng
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                echo "<p style='color:red;'>$error</p>";
+            }
+            return; // Dừng lại và không thực hiện lưu đơn hàng
+        }
+
+        // Nếu không có lỗi, thực hiện lưu đơn hàng
+        $this->placeOrder($first_name, $last_name, $address, $city, $phone, $email, $note);
+    }
+
     // Lấy dữ liệu sản phẩm trong giỏ hàng từ session
     $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
     $totalPrice = 0;
@@ -121,5 +154,49 @@ class homeController
     // Truyền dữ liệu giỏ hàng vào view thanh toán
     require_once 'views/checkout.php';
 }
+public function placeOrder($first_name, $last_name, $address, $city, $phone, $email, $note)
+{
+    // Lấy dữ liệu sản phẩm trong giỏ hàng
+    $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
+    $totalPrice = $_SESSION['sum_price']; // Tổng tiền
+
+    // Lưu thông tin đơn hàng vào cơ sở dữ liệu
+    $order_id = $this->homeModel->createOrder($first_name, $last_name, $address, $city, $phone, $email, $note, $totalPrice);
+
+    // Sau khi tạo đơn hàng, lưu thông tin chi tiết đơn hàng vào bảng order_details
+    $order_items = []; // Mảng chứa thông tin các sản phẩm trong đơn hàng
+    foreach ($productsInCart as $product_id => $product) {
+        // Lưu thông tin chi tiết vào bảng order_details
+        $this->homeModel->createOrderDetails($order_id, $product_id, $product['qty'], $product['price']);
+        // Thêm sản phẩm vào mảng $order_items để lưu vào session
+        $order_items[] = [
+            'title' => $product['title'],
+            'quantity' => $product['qty'],
+            'price' => $product['price']
+        ];
+    }
+
+    // Sau khi lưu đơn hàng, xóa giỏ hàng khỏi session
+    unset($_SESSION['carts']);
+    unset($_SESSION['sum_price']);
+
+    // Lưu thông tin đơn hàng vào session để hiển thị sau đó
+    $_SESSION['order_info'] = [
+        'order_id' => $order_id,
+        'first_name' => $first_name,
+        'last_name' => $last_name,
+        'phone' => $phone,
+        'email' => $email,
+        'address' => $address,
+        'city' => $city,
+        'total_money' => $totalPrice,  // Sử dụng biến $totalPrice
+        'items' => $order_items, // Đây là mảng chứa thông tin các sản phẩm trong đơn hàng
+    ];
+
+    // Chuyển hướng đến trang thành công hoặc thông báo đặt hàng thành công
+    header("Location: success.php"); // Chuyển hướng đến trang thành công
+    exit();
+}
+
 
 }

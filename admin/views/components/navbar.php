@@ -39,13 +39,13 @@
             <li>
                 <a href="index.php?ctl=user-list">
                     <i class='bx bxs-user'></i>
-                    <span class="text">Quản Lý Khách Hàng</span>
+                    <span class="text">Quản Lý Người Dùng</span>
                 </a>
             </li>
             <li>
-                <a href="../?act=/">
-                    <p style="margin: 8px;">🧋</p>
-                    <span class="text">Shop</span>
+                <a href="?ctl=order">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Quản Lý Đơn Hàng</span>
                 </a>
             </li>
         </ul>

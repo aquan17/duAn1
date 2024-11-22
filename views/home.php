@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Quần Áo</title>
+    <title>Male-Fashion</title>
 
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="./assets/css/font-awesome.min.css" type="text/css">
@@ -119,7 +119,14 @@
                                 </div>
                                 <div class="product__item__text">
                                     <h6><?php echo htmlspecialchars($product['title']); ?></h6>
-                                    <a href="#" class="add-cart">+ Add To Cart</a>
+                                    <?php if (isset($_SESSION['user'])): ?>  <!-- Check if user is logged in -->
+                            <form method="post" action="?act=spCart&id=<?= $product['product_id'] ?>">
+                                <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>" />
+                                <a href="" class="add-cart"> <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button></a>
+                            </form>
+                        <?php else: ?>
+                            <a href="?act=login" id="loginBtn" class="add-cart"><button style="border: none;">+ Please Log In to Add To Cart</button></a> <!-- Redirect to login -->
+                            <?php endif; ?>
                                     <div class="rating">
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>

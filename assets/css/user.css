@@ -1,0 +1,59 @@
+ /* Basic styling for the login button */
+ #loginBtn {
+
+    z-index: 10;
+    /* Ensure it stays above other elements */
+}
+
+
+/* Initially hide the dropdown text */
+#loginBtn .dropdown-text {
+    display: none;
+    /* Initially hidden */
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background-color: black;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 10;
+    /* Ensure the dropdown text appears above other elements */
+    opacity: 0;
+    /* Make the dropdown invisible by default */
+    visibility: hidden;
+    /* Make it hidden until shown */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Show dropdown text when hovering over the login button */
+#loginBtn:hover .dropdown-text,
+#loginBtn .dropdown-text:hover {
+    display: block;
+    opacity: 1;
+    /* Hiển thị dropdown-text */
+    visibility: visible;
+    /* Đảm bảo dropdown-text hiển thị */
+}
+
+/* Optional: Faded effect on icon when clicked or hovered */
+#loginBtn:hover img {
+    opacity: 0.8;
+}
+.logout-btn {
+display: inline-block;
+transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+/* Ensure the button isn't disappearing on hover */
+/* background-color: #f1f1f1; Add hover background or border style */
+cursor: pointer;
+color: brown;
+}
+
+.user-menu:hover .logout-btn {
+/* display: block; Ensure the button remains visible */
+}

@@ -20,7 +20,7 @@ class accModel
         } else {
             return false;
         }
-    }
+    }   
     function insertUser($name, $password, $email, $phone, $dchi)
     {
         $sql = "INSERT INTO user (username, password, email, phone_number, address) VALUES (?, ?, ?, ?, ?)";
