@@ -86,14 +86,13 @@ class homeModel
 
         require_once 'views/shopping-cart.php';
     }
-    public function createOrder($first_name, $last_name, $address, $city, $phone, $email, $note, $totalPrice)
+    public function createOrder($full_name, $address, $city, $phone, $email, $note, $totalPrice)
     {
-        $sql = "INSERT INTO orders (first_name, last_name, address, city, phone, email, note, total_price, order_date)
-                VALUES (:first_name, :last_name, :address, :city, :phone, :email, :note, :total_price, NOW())";
+        $sql = "INSERT INTO orders (full_name, address, city, phone, email, note, total_price, order_date)
+                VALUES (:full_name,:address, :city, :phone, :email, :note, :total_price, NOW())";
         
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':first_name', $first_name);
-        $stmt->bindParam(':last_name', $last_name);
+        $stmt->bindParam(':full_name', $full_name);
         $stmt->bindParam(':address', $address);
         $stmt->bindParam(':city', $city);
         $stmt->bindParam(':phone', $phone);

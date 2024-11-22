@@ -36,6 +36,9 @@ switch ($act) {
             echo 'Product ID is missing.';
         }
         break;
+    case 'rendercheckout' :
+        (new homeController())->rendercheckout();
+        break;
     case 'checkout':
         (new homeController())->checkout();
         break;

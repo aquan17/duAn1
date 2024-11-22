@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,31 +42,18 @@
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form action="#" method="POST" onsubmit="return validateForm()">
+                <form action="?act=checkout" method="POST" onsubmit="return validateForm()">
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <h6 class="checkout__title">Payment</h6>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
+                            <div class="checkout__input">
                                         <p>Tên<span>*</span></p>
-                                        <input type="text" id="first_name" name="first_name">
+                                        <input type="text" id="full_name" name="full_name" value="<?= $user['username'] ?>">
                                         <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Họ<span>*</span></p>
-                                        <input type="text" id="last_name" name="last_name">
-                                        <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
-                                    </div>
-                                </div>
                             </div>
-
                             <div class="checkout__input">
                                 <p>Địa Chỉ<span>*</span></p>
-                                <input type="text" placeholder="Đường phố" id="address" name="address">
+                                <input type="text" placeholder="Đường phố" id="address" name="address" value="<?= $user['address'] ?>">
                                 <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
                             </div>
                             <div class="checkout__input">
@@ -78,14 +66,14 @@
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>SDT<span>*</span></p>
-                                        <input type="text" id="phone" name="phone">
+                                        <input type="text" id="phone" name="phone" value="<?= $user['phone_number'] ?>">
                                         <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
-                                        <input type="text" id="email" name="email">
+                                        <input type="text" id="email" name="email" value="<?= $user['email'] ?>">
                                         <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
                                     </div>
                                 </div>
@@ -147,8 +135,7 @@
 <?php require_once 'footer.php' ?>
     <script>
         function validateForm() {
-            var firstName = document.getElementById("first_name").value;
-            var lastName = document.getElementById("last_name").value;
+            var fullName = document.getElementById("full_name").value;
             var address = document.getElementById("address").value;
             var city = document.getElementById("city").value;
             var phone = document.getElementById("phone").value;
@@ -157,11 +144,8 @@
 
             var errorMessages = {};
             
-            if (firstName == "") {
-                errorMessages['first_name'] = "*Tên không được bỏ trống.";
-            }
-            if (lastName == "") {
-                errorMessages['last_name'] = "*Họ không được bỏ trống.";
+            if (fullName == "") {
+                errorMessages['full_name'] = "*Tên không được bỏ trống.";
             }
             if (address == "") {
                 errorMessages['address'] = "*Địa chỉ không được bỏ trống.";
