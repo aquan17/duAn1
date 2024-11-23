@@ -1,18 +1,16 @@
- /* Basic styling for the login button */
- #loginBtn {
-
-    z-index: 10;
-    /* Ensure it stays above other elements */
+/* Basic styling for the login button */
+#loginBtn {
+    position: relative; /* Đảm bảo dropdown nằm đúng vị trí */
+    z-index: 10; /* Đảm bảo nó nằm trên các phần tử khác */
+    cursor: pointer; /* Thêm con trỏ cho nhận diện */
 }
 
-
 /* Initially hide the dropdown text */
-#loginBtn .dropdown-text {
-    display: none;
-    /* Initially hidden */
+/* #loginBtn .dropdown-text, .user-menu .dropdown-text {
     position: absolute;
-    top: 35px;
+    top: 30px;
     left: 0;
+    width: 100px;
     background-color: black;
     color: white;
     padding: 8px 12px;
@@ -20,40 +18,119 @@
     font-size: 14px;
     white-space: nowrap;
     z-index: 10;
-    /* Ensure the dropdown text appears above other elements */
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease, visibility 0s ease 0.3s;
+    } */
+     /* CSS cho trạng thái chưa đăng nhập */
+#loginBtn .dropdown-text {
+    position: absolute;
+    top: 30px; /* Đặt vị trí dropdown */
+    left: 0;
+    width: 100px; /* Chiều rộng cho dropdown khi chưa đăng nhập */
+    background-color: black;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 10; /* Đảm bảo dropdown text nằm trên các phần tử khác */
+    opacity: 0; /* Ban đầu ẩn dropdown */
+    visibility: hidden; /* Đảm bảo không hiển thị cho đến khi hover */
+    transition: opacity 0.3s ease, visibility 0s ease 0.3s;
+}
+
+/* Hiển thị dropdown khi hover vào nút Đăng Nhập */
+#loginBtn:hover .dropdown-text {
+    opacity: 1; /* Hiển thị dropdown-text */
+    visibility: visible; /* Đảm bảo dropdown-text hiển thị */
+    transition: opacity 0.3s ease, visibility 0s ease 0s;
+}
+/* Cấu trúc cơ bản cho user-menu */
+.user-menu {
+    position: relative; /* Đảm bảo dropdown nằm dưới icon mà không làm thay đổi vị trí của icon */
+    display: inline-block; /* Đảm bảo các phần tử bên trong không bị xếp chồng lên nhau */
+    z-index: 10;
+    cursor: pointer;
+
+}
+
+/* Ban đầu ẩn dropdown */
+.user-menu .dropdown-text {
+    position: absolute;
+    top: 35px; /* Đặt vị trí dropdown dưới người dùng */
+    /* right: 0; */
+    left: 0px;
+    width: 150px; /* Điều chỉnh chiều rộng dropdown để các mục vừa vặn */
+    background-color: black;
+    color: white;
+    padding: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 10;
     opacity: 0;
-    /* Make the dropdown invisible by default */
     visibility: hidden;
-    /* Make it hidden until shown */
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0s ease 0.3s;
 }
 
-/* Show dropdown text when hovering over the login button */
-#loginBtn:hover .dropdown-text,
-#loginBtn .dropdown-text:hover {
+/* Đảm bảo dropdown được hiển thị khi hover vào user menu */
+.user-menu:hover .dropdown-text {
+    opacity: 1; /* Hiển thị dropdown-text */
+    visibility: visible; /* Đảm bảo dropdown-text hiển thị */
+    transition: opacity 0.3s ease, visibility 0s ease 0s;
+}
+
+/* Cải thiện hiển thị của các mục trong dropdown */
+.user-menu .dropdown-text li {
     display: block;
-    opacity: 1;
-    /* Hiển thị dropdown-text */
-    visibility: visible;
-    /* Đảm bảo dropdown-text hiển thị */
+    margin: 0;
 }
 
-/* Optional: Faded effect on icon when clicked or hovered */
-#loginBtn:hover img {
-    opacity: 0.8;
+/* Định dạng các liên kết trong dropdown */
+.user-menu .dropdown-text li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: 400;
+    text-transform: capitalize;
+    transition: background-color 0.3s ease;
+    padding-left: 10px; /* Lùi căn lề chữ 1 chút */
 }
+
+/* Thêm hiệu ứng hover cho các mục trong dropdown */
+.user-menu .dropdown-text li a:hover {
+    background-color: #444444;
+    color: #ff4c4c; /* Màu sắc cho văn bản khi hover */
+}
+
+/* Hiển thị dropdown khi hover vào phần tử (login button hoặc user menu) */
+#loginBtn:hover .dropdown-text, 
+.user-menu:hover .dropdown-text {
+    opacity: 1; /* Hiển thị dropdown-text */
+    visibility: visible; /* Đảm bảo dropdown-text hiển thị */
+    transition: opacity 0.3s ease, visibility 0s ease 0s;
+}
+
+/* Faded effect on icon when hovered */
+#loginBtn:hover img, .user-menu:hover img {
+    opacity: 0.8; /* Hiệu ứng mờ cho icon khi hover */
+}
+
+/* Styling for the logout button */
 .logout-btn {
-display: inline-block;
-transition: all 0.3s ease;
+    display: inline-block;
+    transition: all 0.3s ease;
 }
 
+/* Optional hover effect for logout button */
 .logout-btn:hover {
-/* Ensure the button isn't disappearing on hover */
-/* background-color: #f1f1f1; Add hover background or border style */
-cursor: pointer;
-color: brown;
+    cursor: pointer;
+    color: brown; /* Thêm hiệu ứng hover cho logout button */
 }
 
+/* Ensure the button isn't disappearing on hover */
 .user-menu:hover .logout-btn {
-/* display: block; Ensure the button remains visible */
+    /* Điều này đảm bảo logout-btn không bị ẩn khi hover */
 }

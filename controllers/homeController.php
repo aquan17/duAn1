@@ -24,7 +24,8 @@ class homeController
         // $hotSales = $this->homeModel->getHotSales(); // Lấy sản phẩm hot sales
         // $bestSellers = $this->homeModel->getBestSellers(); // Fetch Best Sellers
         // require_once 'views/checkout.php'; // Bao gồm view
-        require_once 'views/home.php'; // Bao gồm view
+        require_once 'views/home.php'; 
+        // require_once 'views/profile/profile.php'; // Bao gồm view
     }
     function Shop()
     {
@@ -114,6 +115,11 @@ class homeController
         $user = $this->accModel->getUser($user1);
         require_once 'views/checkout.php'   ;
     }
+    function renderinfo(){
+        $profile = $_SESSION['user'];
+        $info = $this->accModel->getUser($profile);
+        require_once 'views/profile/profile.php'   ;
+    }
     public function checkout()
 {
     // Kiểm tra nếu người dùng chưa điền đầy đủ thông tin
@@ -202,6 +208,49 @@ public function placeOrder($full_name,$address, $city, $phone, $email, $note)
     header("Location: success.php"); // Chuyển hướng đến trang thành công
     exit();
 }
+public function updateProfile($id)
+{
+
+    // Kiểm tra xem có form submit không
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Lấy dữ liệu từ form
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+
+        // Kiểm tra thông tin đầu vào (optional)
+        if (empty($name) || empty($email) || empty($phone) || empty($address)) {
+            echo "<p style='color:red;'>Please fill all fields!</p>";
+            return;
+        }
+
+        // Gọi phương thức model để cập nhật thông tin
+        $this->homeModel->updateUserInfo($id, $name, $email, $phone, $address);
+
+        // Sau khi cập nhật, chuyển hướng về trang profile
+        header("Location: ?act=profile");  // Chuyển hướng tới trang profile
+        exit;
+    }
+
+    // Nếu không phải POST, thì chỉ hiển thị thông tin người dùng
+    $this->renderinfo($id);
+}
+public function odhistory(){
+    if ($this->homeModel) {
+        $odhistory = $this->homeModel->odhistory();  // Gọi phương thức listOrder từ OrderModel
+
+        if ($odhistory) {
+            // Truyền dữ liệu đơn hàng vào view
+            require_once 'views/profile/orderhistory.php';
+        } else {
+            echo "No orders found.";
+        }
+    } else {
+        echo "Error: Order model is not initialized.";
+    }
+}
+
 
 
 }

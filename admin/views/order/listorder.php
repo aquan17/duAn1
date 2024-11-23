@@ -42,7 +42,7 @@
                 foreach ($orders as $order): ?>
                     <tr>
                         <td><?php echo $i++  ;?></td>
-                        <td><?php echo $order['first_name']; ?></td>
+                        <td><?php echo $order['full_name']; ?></td>
                         <td><?php echo $order['address']; ?></td>
                         <td><?php echo $order['email']; ?></td>
                         <td><?php echo $order['phone']; ?></td>

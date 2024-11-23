@@ -44,11 +44,11 @@
                         <li><a href="">Blog</a></li>
                         <li><a href="">Contacts</a></li>
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
-        <li>
-            <a href="./admin/?ctl="><img src="./assets/images/admin.png" alt="" width="40px"></a>
-        </li>
-    <?php endif; ?>
-                        
+                            <li>
+                                <a href="./admin/?ctl="><img src="./assets/images/admin.png" alt="" width="40px"></a>
+                            </li>
+                        <?php endif; ?>
+
                     </ul>
                 </nav>
             </div>
@@ -62,16 +62,20 @@
                         <div class="user-menu">
                             <img src="./assets/images/icon/user1.png" alt="User Icon">
                             <span class="dropdown-text">Xin chào, <?= htmlspecialchars($_SESSION['user']) ?>!</span>
-                            <a href="?act=logout" class="logout-btn">Đăng Xuất</a>
+                            <ul class="dropdown-text">
+                                <li><a href="?act=profile">Thông tin cá nhân</a></li>
+                                <li><a href="?act=Cart">Đơn hàng của tôi</a></li>
+                                <li><a href="?act=logout" class="logout-btn">Đăng Xuất</a></li>
+                            </ul>
                         </div>
                     <?php else: ?>
                         <!-- Hiển thị nút Đăng nhập khi chưa đăng nhập -->
                         <a href="?act=login" id="loginBtn">
                             <img src="./assets/images/icon/user1.png" alt="User Icon">
-                            <!-- <span class="dropdown-text">Đăng Nhập</span> -->
+                            <span class="dropdown-text">Đăng Nhập</span>
                         </a>
-                        
                     <?php endif; ?>
+
 
                 </div>
                 <div id="searchContainer" style="display: none;">
@@ -82,7 +86,9 @@
         </div>
         <div class="canvas__open"><i class="fa fa-bars"></i></div>
     </div>
+    <script>
 
+    </script>
     <script src="./assets/js/jquery-3.3.1.min.js"></script>
     <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/jquery.nice-select.min.js"></script>

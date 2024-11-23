@@ -39,6 +39,9 @@ switch ($act) {
     case 'rendercheckout' :
         (new homeController())->rendercheckout();
         break;
+        case 'profile' :
+            (new homeController())->renderinfo();
+            break;
     case 'checkout':
         (new homeController())->checkout();
         break;
@@ -52,8 +55,18 @@ switch ($act) {
         (new accController())->insertUser();
         break;
     case 'auth':
-            (new accController())->handleAuth();
+        (new accController())->handleAuth();
             break;
+    case 'updateProfile':
+             if ($id) {
+                    (new homeController())->updateProfile($id);
+            } else {
+                    echo 'User ID is missing.';
+             }
+             break;
+    case "history" :
+         (new homeController())->odhistory();
+         break;
     default:
         echo 'Page not found.';
         break;

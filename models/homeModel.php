@@ -117,8 +117,35 @@ class homeModel
         $stmt->bindParam(':price', $price);
     
         $stmt->execute();
+        }
+        public function updateUserInfo($id, $name, $email, $phone, $address)
+{
+    $sql = "UPDATE user SET username = ?, email = ?, phone_number = ?, address = ? WHERE user_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$name, $email, $phone, $address, $id]);
+
+    // Kiểm tra và trả về kết quả
+    if ($stmt->rowCount() > 0) {
+        return true; // Cập nhật thành công
     }
-        
+    return false; // Không có thay đổi
+}
+public function odhistory() {
+    $sql = "SELECT products.title, products.image, order_details.quantity, order_details.price, orders.status, orders.order_date
+    FROM products
+    INNER JOIN order_details ON products.product_id = order_details.product_id
+    INNER JOIN orders ON orders.order_id = order_details.order_id";
+
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Debug: Kiểm tra dữ liệu trả về
+    // var_dump($result);
+    return $result;
+}
+    
 
 
     // Fetch limited products for "Hot Sales" (random selection)
