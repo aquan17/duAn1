@@ -177,7 +177,7 @@ public function placeOrder($full_name,$address, $city, $phone, $email, $note)
         // Thêm sản phẩm vào mảng $order_items để lưu vào session
         $order_items[] = [
             'title' => $product['title'],
-            'quantity' => $product['qty'],`
+            'quantity' => $product['qty'],
             'price' => $product['price']
         ];
     }
