@@ -153,7 +153,7 @@
                             <!-- <li>Subtotal <span>$ 169.50</span></li> -->
                             <li>Total <span><?= number_format($_SESSION['sum_price']) . 'đ' ?></span></li>
                         </ul>
-                        <a href="?act=checkout" class="primary-btn">Proceed to checkout</a>
+                        <a href="?act=rendercheckout" class="primary-btn">Proceed to checkout</a>
                     </div>
                 </div>
             </div>
