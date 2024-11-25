@@ -25,11 +25,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/search.css">
     <link rel="stylesheet" href="./assets/css/quantity.css">
+    <link rel="stylesheet" href="./assets/css/noti.css">
 </head>
 
 <body>
     <?php require_once 'menu.php' ?>
     <!-- Header Section End -->
+
 
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-option">
@@ -49,13 +51,22 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-
+    <?php
+    if (isset($_SESSION['noti_cart']) && $_SESSION['noti_cart'] == 1) {
+        echo '<div class="noti-success" style="background-color: red;">Sản phẩm đã được xóa khỏi giỏ hàng.</div>';
+        $_SESSION['noti_cart'] = 0;  // Đặt lại thông báo sau khi hiển thị
+    } elseif (isset($_SESSION['noti_cart']) && $_SESSION['noti_cart'] == 2) {
+        echo '<div class="noti-error">Không tìm thấy sản phẩm trong giỏ hàng.</div>';
+        $_SESSION['noti_cart'] = 0;  // Đặt lại thông báo sau khi hiển thị
+    }
+    ?>
     <!-- Shopping Cart Section Begin -->
     <section class="shopping-cart spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="shopping__cart__table">
+
                         <table>
                             <thead>
                                 <tr>
@@ -114,7 +125,12 @@
                                                 echo number_format($total);
                                                 ?>
                                             </td>
-                                            <td class="cart__close"><i class="fa fa-close"></i></td>
+                                            <td class="cart__close">
+                                                <a href="?act=deleteCart&id=<?= $product_id ?>" class="remove-item">
+                                                    <i class="fa fa-close"></i>
+                                                </a>
+                                            </td>
+
                                         </tr>
                                 <?php
                                     }
@@ -151,9 +167,12 @@
                         <h6>Cart total</h6>
                         <ul>
                             <!-- <li>Subtotal <span>$ 169.50</span></li> -->
-                            <li>Total <span><?= number_format($_SESSION['sum_price']) . 'đ' ?></span></li>
+                            <li>Total <span id="cart-total">0đ</span>
+                            </li>
                         </ul>
-                        <a href="?act=rendercheckout" class="primary-btn">Proceed to checkout</a>
+                        <form method="POST" action="?act=rendercheckout">
+                            <button style="margin-left: 35px;" type="submit" class="primary-btn">Proceed to checkout</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -163,6 +182,35 @@
 
     <!-- Footer Section Begin -->
     <?php require_once 'footer.php' ?>
+    <script>
+        // Hàm để chọn/deselect tất cả sản phẩm
+        function toggleSelectAll() {
+            var selectAllCheckbox = document.getElementById('select-all');
+            var productCheckboxes = document.querySelectorAll('input[name="selected_products[]"]');
+
+            // Nếu chọn "Chọn tất cả", thì tất cả các checkbox sản phẩm sẽ được chọn
+            productCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+
+            updateTotalPrice(); // Cập nhật tổng tiền sau khi thay đổi trạng thái
+        }
+
+        // Hàm tính tổng giá trị giỏ hàng cho các sản phẩm đã chọn
+        function updateTotalPrice() {
+            var totalPrice = 0;
+            var selectedProducts = document.querySelectorAll('input[name="selected_products[]"]:checked');
+
+            selectedProducts.forEach(function(checkbox) {
+                var row = checkbox.closest('tr'); // Lấy hàng của sản phẩm
+                var price = row.querySelector('.cart__price').textContent.trim().replace('đ', '').replace(',', ''); // Lấy giá
+                totalPrice += parseFloat(price);
+            });
+
+            // Cập nhật lại tổng giá trị trong giỏ hàng
+            document.getElementById('cart-total').textContent = totalPrice.toLocaleString() + 'đ';
+        }
+    </script>
 
     <!-- Js Plugins -->
 

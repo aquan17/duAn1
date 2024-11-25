@@ -145,17 +145,92 @@ public function odhistory() {
     // var_dump($result);
     return $result;
 }
-    
+function deleteSpcart($id)
+{
+    // Kiểm tra nếu sản phẩm tồn tại trong giỏ hàng
+    if (isset($_SESSION['carts'][$id])) {
+        // Xóa sản phẩm khỏi giỏ hàng
+        unset($_SESSION['carts'][$id]);
+
+        // Cập nhật lại tổng giá trị giỏ hàng
+       
+
+        return true; // Trả về true khi xóa thành công
+    }
+
+    return false; // Trả về false nếu sản phẩm không tồn tại trong giỏ hàng
+}
 
 
-    // Fetch limited products for "Hot Sales" (random selection)
-    // function getHotSales() {
-    //     $sql = "SELECT * FROM products ORDER BY product_id DESC LIMIT 4";
-    //     return $this->conn->query($sql)->fetchAll();
-    // }
-    // function getBestSellers() {
-    //     // Example query: Get top-selling products, or just a predefined list by product IDs
-    //     $sql = "SELECT * FROM products WHERE product_id IN (1, 2, 3, 4, 5)"; // Example, use actual top-selling logic or static IDs
-    //     return $this->conn->query($sql)->fetchAll();
-    // }
+
+public function getProducts($limit, $offset)
+{
+    $sql = "SELECT * FROM products ORDER BY product_id ASC LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+public function getTotalProducts()
+{
+    $sql = "SELECT COUNT(*) FROM products";
+    return $this->conn->query($sql)->fetchColumn();
+}
+// size
+public function getProductSizes($product_id)
+{
+    $sql = "SELECT * FROM product_sizes WHERE product_id = :product_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+// màu
+public function getProductColors($product_id)
+{
+    $sql = "SELECT * FROM product_colors WHERE product_id = :product_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+// Fetch comments for a specific product
+public function getProductComments($product_id)
+{
+    $sql = "SELECT * FROM comments WHERE product_id = :product_id ORDER BY created_at DESC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+// Add a comment for a product
+public function addComment($product_id, $user_id, $comment_name, $comment_email, $comment_text)
+{
+    try {
+        $sql = "INSERT INTO comments (product_id, user_id, full_name, email, note) 
+                VALUES (:product_id, :user_id, :full_name, :email, :note)";
+        $stmt = $this->conn->prepare($sql);
+
+        // Gắn tham số cho câu lệnh SQL
+        $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':full_name', $comment_name, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $comment_email, PDO::PARAM_STR);
+        $stmt->bindParam(':note', $comment_text, PDO::PARAM_STR);
+
+        // Thực thi câu lệnh SQL
+        $stmt->execute();
+        return true; // Trả về true nếu thành công
+    } catch (Exception $e) {
+        // In ra lỗi nếu có
+        echo "Error: " . $e->getMessage();
+        return false; // Trả về false nếu có lỗi
+    }
+}
+
+
+
 }

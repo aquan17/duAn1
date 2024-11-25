@@ -74,9 +74,8 @@
                             <img src="./assets/images/icon/user1.png" alt="User Icon">
                             <span class="dropdown-text">Đăng Nhập</span>
                         </a>
-                    <?php endif; ?>
-
-
+                    <?php endif; ?><br>
+                    <p style="color: crimson;">Xin Chào, <?= $_SESSION['user']  ?>!</p>
                 </div>
                 <div id="searchContainer" style="display: none;">
                     <input type="text" id="searchInput" placeholder="Search for products..." />

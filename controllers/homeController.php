@@ -25,13 +25,32 @@ class homeController
         // $bestSellers = $this->homeModel->getBestSellers(); // Fetch Best Sellers
         // require_once 'views/checkout.php'; // Bao gồm view
         require_once 'views/home.php'; 
+        // require_once 'views/comment.php'; 
         // require_once 'views/profile/profile.php'; // Bao gồm view
     }
-    function Shop()
+    public function shop()
     {
-        $products = $this->homeModel->Products();
+        // Số sản phẩm mỗi trang
+        $limit = 9;
+    
+        // Tính toán tổng số sản phẩm
+        $totalProducts = $this->homeModel->getTotalProducts();  // Lấy tổng số sản phẩm
+        $totalPages = ceil($totalProducts / $limit);  // Tổng số trang
+    
+        // Xác định trang hiện tại
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $currentPage = max(1, min($currentPage, $totalPages));  // Đảm bảo trang hợp lệ
+    
+        // Tính toán offset
+        $offset = ($currentPage - 1) * $limit;
+    
+        // Lấy các sản phẩm cho trang hiện tại
+        $products = $this->homeModel->getProducts($limit, $offset);
+    
+        // Truyền dữ liệu vào view
         require_once 'views/shop.php';
     }
+    
     
 
     public function spCard($id)
@@ -99,17 +118,21 @@ class homeController
     // homeController.php
     public function shop_details($id)
     {
-        $s_details = $this->homeModel->findProductById($id);  // Lấy chi tiết sản phẩm
+        // Lấy thông tin chi tiết sản phẩm
+        $s_details = $this->homeModel->findProductById($id);  
+        // Lấy các size và màu sắc của sản phẩm
+        $sizes = $this->homeModel->getProductSizes($id);  
+        $colors = $this->homeModel->getProductColors($id);
+    
+        // Kiểm tra nếu tìm thấy sản phẩm, sau đó hiển thị
         if ($s_details) {
-            require_once 'views/shop-details.php';  // Truyền dữ liệu vào view
+            // Truyền dữ liệu vào view
+            require_once 'views/shop-details.php';  
         } else {
             echo 'Product not found';  // Nếu không tìm thấy sản phẩm
         }
-        
-        // echo "<pre>";
-        // $s_details;
-        // echo "</pre>";
     }
+    
     function rendercheckout(){
         $user1 = $_SESSION['user'];
         $user = $this->accModel->getUser($user1);
@@ -121,51 +144,76 @@ class homeController
         require_once 'views/profile/profile.php'   ;
     }
     public function checkout()
-{
-    // Kiểm tra nếu người dùng chưa điền đầy đủ thông tin
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Lấy dữ liệu từ form
-        $full_name = $_POST['full_name'];
-        $address = $_POST['address'];
-        $city = $_POST['city'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $note = $_POST['note'];
-
-        // Kiểm tra các trường bắt buộc
-        $errors = [];
-        if (empty($full_name)) $errors[] = 'full name is required.';
-        if (empty($address)) $errors[] = 'Address is required.';
-        if (empty($city)) $errors[] = 'City is required.';
-        if (empty($phone)) $errors[] = 'Phone number is required.';
-        if (empty($email)) $errors[] = 'Email is required.';
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format.';
-
-        // Nếu có lỗi, hiển thị thông báo lỗi và không lưu đơn hàng
-        if (count($errors) > 0) {
-            foreach ($errors as $error) {
-                echo "<p style='color:red;'>$error</p>";
+    {
+        // Kiểm tra nếu người dùng gửi form
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_POST['selected_products']) && !empty($_POST['selected_products'])) {
+                // Lấy danh sách sản phẩm được chọn từ form
+                $selected_products = $_POST['selected_products'];
+    
+                // Lấy thông tin người dùng từ form
+                $full_name = $_POST['full_name'];
+                $address = $_POST['address'];
+                $city = $_POST['city'];
+                $phone = $_POST['phone'];
+                $email = $_POST['email'];
+                $note = $_POST['note'];
+    
+                // Kiểm tra thông tin đầu vào
+                $errors = [];
+                if (empty($full_name)) $errors[] = 'Full name is required.';
+                if (empty($address)) $errors[] = 'Address is required.';
+                if (empty($city)) $errors[] = 'City is required.';
+                if (empty($phone)) $errors[] = 'Phone number is required.';
+                if (empty($email)) $errors[] = 'Email is required.';
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format.';
+    
+                // Nếu có lỗi, hiển thị thông báo lỗi và không lưu đơn hàng
+                if (count($errors) > 0) {
+                    foreach ($errors as $error) {
+                        echo "<p style='color:red;'>$error</p>";
+                    }
+                    return; // Dừng lại và không thực hiện lưu đơn hàng
+                }
+    
+                // Lấy các sản phẩm trong giỏ hàng đã được chọn
+                $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
+                $selected_items = [];
+                foreach ($selected_products as $product_id) {
+                    if (isset($productsInCart[$product_id])) {
+                        $selected_items[$product_id] = $productsInCart[$product_id];
+                    }
+                }
+    
+                // Tính tổng giá trị đơn hàng
+                $totalPrice = 0;
+                foreach ($selected_items as $product) {
+                    $totalPrice += $product['price'] * $product['qty'];
+                }
+    
+                // Lưu thông tin đơn hàng vào cơ sở dữ liệu
+                $order_id = $this->homeModel->createOrder($full_name, $address, $city, $phone, $email, $note, $totalPrice);
+    
+                // Lưu thông tin chi tiết đơn hàng vào bảng order_details
+                foreach ($selected_items as $product_id => $product) {
+                    $this->homeModel->createOrderDetails($order_id, $product_id, $product['qty'], $product['price']);
+                }
+    
+                // Xóa giỏ hàng sau khi đặt hàng thành công
+                unset($_SESSION['carts']);
+    
+                // Sau khi tạo đơn hàng, chuyển hướng đến trang thành công
+                header("Location: success.php");
+                exit();
+            } else {
+                echo "<p style='color:red;'>No products selected.</p>";
             }
-            return; // Dừng lại và không thực hiện lưu đơn hàng
         }
-
-        // Nếu không có lỗi, thực hiện lưu đơn hàng
-        $this->placeOrder($full_name,  $address, $city, $phone, $email, $note);
+    
+        // Hiển thị giỏ hàng và thanh toán
+        require_once 'views/checkout.php';
     }
-
-    // Lấy dữ liệu sản phẩm trong giỏ hàng từ session
-    $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
-    $totalPrice = 0;
-    foreach ($productsInCart as $value) {
-        $totalPrice += $value['price'] * $value['qty']; // Tính tổng tiền
-    }
-
-    // Lưu tổng giá trị vào session nếu cần
-    $_SESSION['sum_price'] = $totalPrice;
-
-    // Truyền dữ liệu giỏ hàng vào view thanh toán
-    require_once 'views/checkout.php';
-}
+    
 public function placeOrder($full_name,$address, $city, $phone, $email, $note)
 {
     // Lấy dữ liệu sản phẩm trong giỏ hàng
@@ -250,6 +298,73 @@ public function odhistory(){
         echo "Error: Order model is not initialized.";
     }
 }
+function deleteProduct($id)
+{
+    // Kiểm tra nếu sản phẩm tồn tại trong giỏ hàng
+    if (isset($_SESSION['carts'][$id])) {
+        // Xóa sản phẩm khỏi giỏ hàng
+        unset($_SESSION['carts'][$id]);
+
+        // Cập nhật lại tổng giá trị giỏ hàng
+        
+
+        // Thông báo thành công và chuyển hướng lại trang giỏ hàng
+        $_SESSION['noti_cart'] = 1; // Đặt thông báo xóa thành công
+        header("Location: ?act=Cart"); // Hoặc trang giỏ hàng của bạn
+        exit();
+    } else {
+        // Thông báo lỗi nếu sản phẩm không tồn tại trong giỏ hàng
+        $_SESSION['noti_cart'] = 2; // Đặt thông báo lỗi nếu không tìm thấy sản phẩm
+        header("Location: ?act=Cart"); // Chuyển hướng về trang giỏ hàng
+        exit();
+    }
+}
+public function productDetails($id)
+{
+    // Lấy thông tin chi tiết sản phẩm
+    $s_details = $this->homeModel->findProductById($id);
+    
+    // Lấy các bình luận cho sản phẩm
+    $comments = $this->homeModel->getProductComments($id);
+
+    // Nếu không có bình luận, khởi tạo thành mảng rỗng
+    if (!$comments) {
+        $comments = [];  // Khởi tạo thành mảng rỗng nếu không có bình luận
+    }
+
+    // Xử lý khi người dùng gửi bình luận
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment_text'])) {
+        
+        // Kiểm tra nếu người dùng đã đăng nhập
+        if (isset($_SESSION['user_id'])) {
+            
+            $user_id = $_SESSION['user_id'];  // Lấy user_id từ session
+            $comment_name = $_POST['comment_name'];  // Lấy tên người bình luận
+            $comment_email = $_POST['comment_email'];  // Lấy email người bình luận
+            $comment_text = trim($_POST['comment_text']);  // Lấy nội dung bình luận
+
+            // Kiểm tra nếu nội dung bình luận không rỗng
+            if (!empty($comment_text)) {
+                // Thêm bình luận vào cơ sở dữ liệu
+                $this->homeModel->addComment($id, $user_id, $comment_name, $comment_email, $comment_text);
+
+                // Sau khi thêm bình luận, chuyển hướng lại trang chi tiết sản phẩm để xem bình luận mới
+                header("Location: ?act=comments&id=$id");
+                exit;
+            } else {
+                $error_message = "Please enter a comment."; // Thông báo nếu không có nội dung bình luận
+            }
+        } else {
+            $error_message = "You must be logged in to comment."; // Thông báo nếu chưa đăng nhập
+        }
+    }
+
+    // Hiển thị chi tiết sản phẩm và bình luận trong view
+    require_once 'views/shop-details.php';  // Load view chi tiết sản phẩm và bình luận
+}
+
+
+
 
 
 

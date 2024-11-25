@@ -423,7 +423,7 @@
         </div>
     </section>
     <!-- Shop Details Section End -->
-
+    <?php  require_once 'comment.php' ?>
     <!-- Related Section Begin -->
     <section class="related spad">
         <div class="container">
@@ -580,6 +580,23 @@
     <?php require_once 'footer.php' ?>
     <!-- Footer Section End -->
 
+    <script>
+    // Tăng số lượng
+    document.querySelector('.quantityIncreaseButton').addEventListener('click', function() {
+        var qtyInput = document.getElementById('ul-product-details-quantity');
+        var currentQty = parseInt(qtyInput.value);
+        qtyInput.value = currentQty + 1;
+    });
+
+    // Giảm số lượng
+    document.querySelector('.quantityDecreaseButton').addEventListener('click', function() {
+        var qtyInput = document.getElementById('ul-product-details-quantity');
+        var currentQty = parseInt(qtyInput.value);
+        if (currentQty > 1) {
+            qtyInput.value = currentQty - 1;
+        }
+    });
+</script>
 
 
     <!-- Js Plugins -->

@@ -23,6 +23,9 @@ switch ($act) {
     case 'spCart':
         (new homeController())->spCard($id);
         break;
+        case 'deleteCart':
+            (new homeController())->deleteProduct($id);
+            break;
     case 'Cart':
         (new homeModel())->Card();
         break;
@@ -67,6 +70,9 @@ switch ($act) {
     case "history" :
          (new homeController())->odhistory();
          break;
+         case "comments" :
+            (new homeController())->productDetails($id);
+            break;
     default:
         echo 'Page not found.';
         break;

@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
     <link rel="stylesheet" href="./assets/css/noti.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
 
 <body>
     <?php
@@ -248,68 +248,60 @@
                     </div>
                     <!-- Product -->
                     <div class="row">
-    <?php if ($products): ?>
-        <?php foreach ($products as $shop): ?>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?= $shop['image'] ?>">
-                        <a href="?act=details&id=<?= $shop['product_id'] ?>">
-                            <img src="./assets/images/product/<?= $shop['image'] ?>" alt="Product Image">
-                        </a>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="./assets/images/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="./assets/images/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="product__item__text">
-                        <h6><?= $shop['title'] ?></h6>
-                        <!-- Form to Add to Cart -->
-                        <?php if (isset($_SESSION['user'])): ?>  <!-- Check if user is logged in -->
-                            <form method="post" action="?act=spCart&id=<?= $shop['product_id'] ?>">
-                                <input type="hidden" name="product_id" value="<?= $shop['product_id'] ?>" />
-                                <a href="" class="add-cart"> <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button></a>
-                            </form>
+                        <?php if ($products): ?>
+                            <?php foreach ($products as $shop): ?>
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?= $shop['image'] ?>">
+                                            <a href="?act=details&id=<?= $shop['product_id'] ?>">
+                                                <img src="./assets/images/product/<?= $shop['image'] ?>" alt="Product Image">
+                                            </a>
+                                            <ul class="product__hover">
+                                                <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
+                                                <li><a href="#"><img src="./assets/images/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                                                <li><a href="#"><img src="./assets/images/icon/search.png" alt=""></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text">
+                                            <h6><?= $shop['title'] ?></h6>
+                                            <?php if (isset($_SESSION['user'])): ?>
+                                                <form method="post" action="?act=spCart&id=<?= $shop['product_id'] ?>">
+                                                    <input type="hidden" name="product_id" value="<?= $shop['product_id'] ?>" />
+                                                    <a href="" class="add-cart">
+                                                        <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button>
+                                                    </a>
+                                                </form>
+                                            <?php else: ?>
+                                                <a href="?act=login" id="loginBtn" class="add-cart"><button style="border: none;">+ Please Log In to Add To Cart</button></a>
+                                            <?php endif; ?>
+                                            <div class="rating">
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <h5><?= number_format($shop['price']) . 'đ' ?></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         <?php else: ?>
-                            <a href="?act=login" id="loginBtn" class="add-cart"><button style="border: none;">+ Please Log In to Add To Cart</button></a> <!-- Redirect to login -->
-                            <?php endif; ?>
-
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5><?= number_format($shop['price']) . 'đ' ?></h5>
-                        <div class="product__color__select">
-                            <label for="pc-4"><input type="radio" id="pc-4"></label>
-                            <label class="active black" for="pc-5"><input type="radio" id="pc-5"></label>
-                            <label class="grey" for="pc-6"><input type="radio" id="pc-6"></label>
-                        </div>
+                            <p>Không có sản phẩm nào</p>
+                        <?php endif; ?>
                     </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>Không có sản phẩm nào</p>
-    <?php endif; ?>
-</div>
 
-
-                    <!-- End Product -->
+                    <!-- Phân trang -->
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="product__pagination">
-                                <a class="active" href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <span>...</span>
-                                <a href="#">21</a>
+                                <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                    <a class="<?= $page == $currentPage ? 'active' : '' ?>" href="?act=shop&page=<?= $page ?>"><?= $page ?></a>
+                                <?php endfor; ?>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -321,8 +313,8 @@
     require_once 'footer.php'
     ?>
 
-    
-    
+
+
 </body>
 
 </html>

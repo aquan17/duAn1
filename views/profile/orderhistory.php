@@ -42,7 +42,7 @@
                     <?php
                     $i = 1;
                     $_SESSION['sum_price'] = 0;
-                    foreach ($odhistory as $history) { ?>cccc
+                    foreach ($odhistory as $history) { ?>
                         <tr>
                             <td><?= $i++ ?></td>
                             <td><?= $history['title'] ?></td>

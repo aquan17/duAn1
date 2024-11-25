@@ -22,9 +22,15 @@ class accModel
 
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch();
+            $_SESSION['user_id'] = $row['user_id'];
+            $_SESSION['email'] = $row['email'];
             $_SESSION['user'] = $user;
 
             $_SESSION['role'] = $row['role_id']; // Lưu vai trò người dùng vào session
+            echo '<pre>';
+            print_r($_SESSION);
+            echo '</pre>';
+
             return true;
         } else {
             return false;
