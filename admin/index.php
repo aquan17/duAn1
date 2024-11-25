@@ -33,8 +33,8 @@ match("$ctl") {
     "user-store" => (new UserController())->store(),
     "user-edit" => (new UserController())->edit(),
     "user-delete" => (new UserController())->delete(),
-    "order" => (new OrderController())->list(),
-    "viewod" => (new OrderController())->viewsod(),
+    "order" => (new OrderController())->listOrders(),
+    "viewod" => (new OrderController())->viewOrderDetails(),
     
     
     default => view('404'),
