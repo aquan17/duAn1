@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Comments</title>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"> -->
     <style>
         body {
             margin: 0;
@@ -145,10 +145,16 @@
 </head>
 <body>
 
+<?php if (!empty($error_message)): ?>
+    <div class="error-message">
+        <p><?= htmlspecialchars($error_message); ?></p>
+    </div>
+<?php endif; ?>
+
 <div class="container">
     <div class="be-comment-block">
-        <h1 class="comments-title">Comments ()</h1>
-        
+        <h1 class="comments-title">Comments (<?= count($comments) ?>)</h1>
+
         <!-- Display existing comments -->
         <?php if (!empty($comments)): ?>
             <?php foreach ($comments as $comment): ?>
@@ -160,7 +166,7 @@
                     </div>
                     <div class="be-comment-content">
                         <span class="be-comment-name">
-                            <a href="profile.php?id=<?= $comment['user_id'] ?>"><?= htmlspecialchars($_SESSION['user']); ?></a>
+                            <a href="profile.php?id=<?= $comment['user_id'] ?>"><?= htmlspecialchars($comment['username']); ?></a>
                         </span>
                         <span class="be-comment-time">
                             <i class="fa fa-clock-o"></i>
@@ -177,18 +183,15 @@
         <?php endif; ?>
 
         <!-- Comment Form -->
-        <?php 
-        var_dump($_POST);
-        var_dump($_SESSION['user_id']);
-        if (isset($_SESSION['user_id'])): ?>
+        <?php if (isset($_SESSION['user_id'])): ?>
             <form method="POST" action="?act=comments&id=<?= $s_details['product_id'] ?>"> <!-- Truyền product_id qua URL -->
                 <div class="form-group">
                     <div class="icon"><i class="fa fa-user"></i></div>
-                    <input class="form-input" type="text" name="comment_name" placeholder="Your name" disabled value="<?= $_SESSION['user']  ?>" >
+                    <input class="form-input" type="text" name="comment_name" placeholder="Your name" disabled value="<?= $_SESSION['user'] ?>" >
                 </div>
                 <div class="form-group">
                     <div class="icon1"><i class="fa fa-envelope-o"></i></div>
-                    <input class="form-input" type="email" name="comment_email" placeholder="Your email" disabled value="<?= $_SESSION['email']  ?>" >
+                    <input class="form-input" type="email" name="comment_email" placeholder="Your email" disabled value="<?= $_SESSION['email'] ?>" >
                 </div>
                 <div class="form-group">
                     <textarea class="form-input" name="comment_text" required placeholder="Your text"></textarea>

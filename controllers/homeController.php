@@ -132,85 +132,87 @@ class homeController
             echo 'Product not found';  // Nếu không tìm thấy sản phẩm
         }
     }
-    
-    function rendercheckout(){
-        $user1 = $_SESSION['user'];
-        $user = $this->accModel->getUser($user1);
-        require_once 'views/checkout.php'   ;
-    }
     function renderinfo(){
         $profile = $_SESSION['user'];
         $info = $this->accModel->getUser($profile);
         require_once 'views/profile/profile.php'   ;
     }
+    
+    function rendercheckout(){
+        $user1 = $_SESSION['user'];  // Lấy người dùng hiện tại
+        $user = $this->accModel->getUser($user1);  // Lấy thông tin người dùng từ model
+    
+        // Hiển thị trang checkout cho người dùng
+        require_once 'views/checkout.php'; 
+    
+        // Kiểm tra nếu form đã được gửi và có sản phẩm được chọn
+        if (isset($_POST['selected_products']) && !empty($_POST['selected_products'])) {
+            // Lấy danh sách các sản phẩm đã chọn
+            $selected_products = explode(',', $_POST['selected_products']);
+            
+            $total_price = 0;
+            
+            // Duyệt qua các sản phẩm đã chọn và tính tổng giá trị
+            foreach ($selected_products as $product_id) {
+                if (isset($_SESSION['carts'][$product_id])) {
+                    $product = $_SESSION['carts'][$product_id];
+                    $total_price += $product['price'] * $product['qty'];  // Tính tổng giá trị của từng sản phẩm đã chọn
+                }
+            }
+            
+            // Lưu tổng giá trị vào session
+            $_SESSION['total_price'] = $total_price;
+        } else {
+            // Nếu không có sản phẩm nào được chọn, hiển thị thông báo
+            echo "Không có sản phẩm nào được chọn.";
+        }
+    }
+    
+    
     public function checkout()
     {
-        // Kiểm tra nếu người dùng gửi form
+        // Kiểm tra nếu người dùng chưa điền đầy đủ thông tin
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (isset($_POST['selected_products']) && !empty($_POST['selected_products'])) {
-                // Lấy danh sách sản phẩm được chọn từ form
-                $selected_products = $_POST['selected_products'];
+            // Lấy dữ liệu từ form
+            $full_name = $_POST['full_name'];
+            $address = $_POST['address'];
+            $city = $_POST['city'];
+            $phone = $_POST['phone'];
+            $email = $_POST['email'];
+            $note = $_POST['note'];
     
-                // Lấy thông tin người dùng từ form
-                $full_name = $_POST['full_name'];
-                $address = $_POST['address'];
-                $city = $_POST['city'];
-                $phone = $_POST['phone'];
-                $email = $_POST['email'];
-                $note = $_POST['note'];
+            // Kiểm tra các trường bắt buộc
+            $errors = [];
+            if (empty($full_name)) $errors[] = 'full name is required.';
+            if (empty($address)) $errors[] = 'Address is required.';
+            if (empty($city)) $errors[] = 'City is required.';
+            if (empty($phone)) $errors[] = 'Phone number is required.';
+            if (empty($email)) $errors[] = 'Email is required.';
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format.';
     
-                // Kiểm tra thông tin đầu vào
-                $errors = [];
-                if (empty($full_name)) $errors[] = 'Full name is required.';
-                if (empty($address)) $errors[] = 'Address is required.';
-                if (empty($city)) $errors[] = 'City is required.';
-                if (empty($phone)) $errors[] = 'Phone number is required.';
-                if (empty($email)) $errors[] = 'Email is required.';
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format.';
-    
-                // Nếu có lỗi, hiển thị thông báo lỗi và không lưu đơn hàng
-                if (count($errors) > 0) {
-                    foreach ($errors as $error) {
-                        echo "<p style='color:red;'>$error</p>";
-                    }
-                    return; // Dừng lại và không thực hiện lưu đơn hàng
+            // Nếu có lỗi, hiển thị thông báo lỗi và không lưu đơn hàng
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    echo "<p style='color:red;'>$error</p>";
                 }
-    
-                // Lấy các sản phẩm trong giỏ hàng đã được chọn
-                $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
-                $selected_items = [];
-                foreach ($selected_products as $product_id) {
-                    if (isset($productsInCart[$product_id])) {
-                        $selected_items[$product_id] = $productsInCart[$product_id];
-                    }
-                }
-    
-                // Tính tổng giá trị đơn hàng
-                $totalPrice = 0;
-                foreach ($selected_items as $product) {
-                    $totalPrice += $product['price'] * $product['qty'];
-                }
-    
-                // Lưu thông tin đơn hàng vào cơ sở dữ liệu
-                $order_id = $this->homeModel->createOrder($full_name, $address, $city, $phone, $email, $note, $totalPrice);
-    
-                // Lưu thông tin chi tiết đơn hàng vào bảng order_details
-                foreach ($selected_items as $product_id => $product) {
-                    $this->homeModel->createOrderDetails($order_id, $product_id, $product['qty'], $product['price']);
-                }
-    
-                // Xóa giỏ hàng sau khi đặt hàng thành công
-                unset($_SESSION['carts']);
-    
-                // Sau khi tạo đơn hàng, chuyển hướng đến trang thành công
-                header("Location: success.php");
-                exit();
-            } else {
-                echo "<p style='color:red;'>No products selected.</p>";
+                return; // Dừng lại và không thực hiện lưu đơn hàng
             }
+    
+            // Nếu không có lỗi, thực hiện lưu đơn hàng
+            $this->placeOrder($full_name,  $address, $city, $phone, $email, $note);
         }
     
-        // Hiển thị giỏ hàng và thanh toán
+        // Lấy dữ liệu sản phẩm trong giỏ hàng từ session
+        $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
+        $totalPrice = 0;
+        foreach ($productsInCart as $value) {
+            $totalPrice += $value['price'] * $value['qty']; // Tính tổng tiền
+        }
+    
+        // Lưu tổng giá trị vào session nếu cần
+        $_SESSION['sum_price'] = $totalPrice;
+    
+        // Truyền dữ liệu giỏ hàng vào view thanh toán
         require_once 'views/checkout.php';
     }
     
@@ -253,7 +255,7 @@ public function placeOrder($full_name,$address, $city, $phone, $email, $note)
     ];
 
     // Chuyển hướng đến trang thành công hoặc thông báo đặt hàng thành công
-    header("Location: success.php"); // Chuyển hướng đến trang thành công
+    header("Location: views/success.php"); // Chuyển hướng đến trang thành công
     exit();
 }
 public function updateProfile($id)
@@ -339,14 +341,14 @@ public function productDetails($id)
         if (isset($_SESSION['user_id'])) {
             
             $user_id = $_SESSION['user_id'];  // Lấy user_id từ session
-            $comment_name = $_POST['comment_name'];  // Lấy tên người bình luận
-            $comment_email = $_POST['comment_email'];  // Lấy email người bình luận
+            // $comment_name = $_POST['comment_name'];  // Lấy tên người bình luận
+            // $comment_email = $_POST['comment_email'];  // Lấy email người bình luận
             $comment_text = trim($_POST['comment_text']);  // Lấy nội dung bình luận
 
             // Kiểm tra nếu nội dung bình luận không rỗng
             if (!empty($comment_text)) {
                 // Thêm bình luận vào cơ sở dữ liệu
-                $this->homeModel->addComment($id, $user_id, $comment_name, $comment_email, $comment_text);
+                $this->homeModel->addComment($id, $user_id,  $comment_text);
 
                 // Sau khi thêm bình luận, chuyển hướng lại trang chi tiết sản phẩm để xem bình luận mới
                 header("Location: ?act=comments&id=$id");

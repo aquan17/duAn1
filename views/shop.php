@@ -253,7 +253,7 @@
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
                                         <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?= $shop['image'] ?>">
-                                            <a href="?act=details&id=<?= $shop['product_id'] ?>">
+                                            <a href="?act=comments&id=<?= $shop['product_id'] ?>">
                                                 <img src="./assets/images/product/<?= $shop['image'] ?>" alt="Product Image">
                                             </a>
                                             <ul class="product__hover">

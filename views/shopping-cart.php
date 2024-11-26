@@ -170,9 +170,11 @@
                             <li>Total <span id="cart-total">0đ</span>
                             </li>
                         </ul>
-                        <form method="POST" action="?act=rendercheckout">
+                        <form method="POST" action="?act=rendercheckout" onsubmit="updateCheckoutForm()">
+                            <input type="hidden" name="selected_products" id="selected-products">
                             <button style="margin-left: 35px;" type="submit" class="primary-btn">Proceed to checkout</button>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -183,33 +185,50 @@
     <!-- Footer Section Begin -->
     <?php require_once 'footer.php' ?>
     <script>
-        // Hàm để chọn/deselect tất cả sản phẩm
-        function toggleSelectAll() {
-            var selectAllCheckbox = document.getElementById('select-all');
-            var productCheckboxes = document.querySelectorAll('input[name="selected_products[]"]');
+      // Hàm để chọn/deselect tất cả sản phẩm
+function toggleSelectAll() {
+    var selectAllCheckbox = document.getElementById('select-all');
+    var productCheckboxes = document.querySelectorAll('input[name="selected_products[]"]');
 
-            // Nếu chọn "Chọn tất cả", thì tất cả các checkbox sản phẩm sẽ được chọn
-            productCheckboxes.forEach(function(checkbox) {
-                checkbox.checked = selectAllCheckbox.checked;
-            });
+    // Nếu chọn "Chọn tất cả", thì tất cả các checkbox sản phẩm sẽ được chọn
+    productCheckboxes.forEach(function(checkbox) {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
 
-            updateTotalPrice(); // Cập nhật tổng tiền sau khi thay đổi trạng thái
-        }
+    updateTotalPrice(); // Cập nhật tổng tiền sau khi thay đổi trạng thái
+}
 
-        // Hàm tính tổng giá trị giỏ hàng cho các sản phẩm đã chọn
-        function updateTotalPrice() {
-            var totalPrice = 0;
-            var selectedProducts = document.querySelectorAll('input[name="selected_products[]"]:checked');
+// Hàm tính tổng giá trị giỏ hàng cho các sản phẩm đã chọn
+function updateTotalPrice() {
+    var totalPrice = 0;
+    var selectedProducts = document.querySelectorAll('input[name="selected_products[]"]:checked');
 
-            selectedProducts.forEach(function(checkbox) {
-                var row = checkbox.closest('tr'); // Lấy hàng của sản phẩm
-                var price = row.querySelector('.cart__price').textContent.trim().replace('đ', '').replace(',', ''); // Lấy giá
-                totalPrice += parseFloat(price);
-            });
+    selectedProducts.forEach(function(checkbox) {
+        var row = checkbox.closest('tr'); // Lấy hàng của sản phẩm
+        var price = row.querySelector('.cart__price').textContent.trim().replace('đ', '').replace(',', ''); // Lấy giá sản phẩm
+        totalPrice += parseFloat(price);
+    });
 
-            // Cập nhật lại tổng giá trị trong giỏ hàng
-            document.getElementById('cart-total').textContent = totalPrice.toLocaleString() + 'đ';
-        }
+    // Cập nhật lại tổng giá trị trong giỏ hàng
+    document.getElementById('cart-total').textContent = totalPrice.toLocaleString() + 'đ';
+}
+
+// Cập nhật form checkout khi người dùng chọn sản phẩm
+  // Hàm này sẽ thu thập các ID của sản phẩm đã chọn và lưu vào trường hidden
+  function updateCheckoutForm() {
+        var selectedProducts = [];
+        var productCheckboxes = document.querySelectorAll('input[name="selected_products[]"]:checked');
+        
+        productCheckboxes.forEach(function(checkbox) {
+            selectedProducts.push(checkbox.value);
+        });
+
+        // Cập nhật trường hidden với danh sách các sản phẩm đã chọn
+        document.getElementById('selected-products').value = selectedProducts.join(',');
+    }
+
+    // Gọi hàm này khi form được submit
+    document.querySelector('form').onsubmit = updateCheckoutForm;
     </script>
 
     <!-- Js Plugins -->

@@ -67,15 +67,17 @@
                                 <li><a href="?act=Cart">Đơn hàng của tôi</a></li>
                                 <li><a href="?act=logout" class="logout-btn">Đăng Xuất</a></li>
                             </ul>
+
                         </div>
+                        <p style="color: crimson;">Xin Chào, <?= $_SESSION['user']  ?>!</p>
                     <?php else: ?>
                         <!-- Hiển thị nút Đăng nhập khi chưa đăng nhập -->
                         <a href="?act=login" id="loginBtn">
                             <img src="./assets/images/icon/user1.png" alt="User Icon">
                             <span class="dropdown-text">Đăng Nhập</span>
                         </a>
-                    <?php endif; ?><br>
-                    <p style="color: crimson;">Xin Chào, <?= $_SESSION['user']  ?>!</p>
+                    <?php endif; ?>
+
                 </div>
                 <div id="searchContainer" style="display: none;">
                     <input type="text" id="searchInput" placeholder="Search for products..." />

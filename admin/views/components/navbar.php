@@ -37,7 +37,7 @@
                 </a>
             </li>
             <li>
-                <a href="?act=user">
+                <a href="?ctl=user-list">
                     <i class='bx bxs-user'></i>
                     <span class="text">Quản Lý Khách Hàng</span>
                 </a>

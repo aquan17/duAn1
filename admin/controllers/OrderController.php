@@ -1,43 +1,27 @@
 <?php
-require_once 'models/Order.php'; // Đảm bảo yêu cầu model Order
+require_once 'models/Order.php';
 
 class OrderController {
+    private $orderModel;
 
-    private $orderModel; // Biến để chứa đối tượng OrderModel
-
-    // Constructor khởi tạo đối tượng OrderModel
     public function __construct() {
-        $this->orderModel = new Order(); // Khởi tạo đối tượng Order từ class Order
+        $this->orderModel = new Order();
     }
 
-    // Phương thức list() để hiển thị đơn hàng
-    public function list() {
-        // Kiểm tra nếu $orderModel đã được khởi tạo thành công
-        if ($this->orderModel) {
-            $orders = $this->orderModel->listOrder();  // Gọi phương thức listOrder từ OrderModel
-
-            if ($orders) {
-                // Truyền dữ liệu đơn hàng vào view
-                require_once 'views/order/listorder.php';
-            } else {
-                echo "No orders found.";
-            }
-        } else {
-            echo "Error: Order model is not initialized.";
-        }
+    // Hiển thị danh sách đơn hàng
+    public function listOrders() {
+        $orders = $this->orderModel->listOrders();
+        require_once 'views/order/listorder.php';
     }
-    public function viewsod(){
-        if ($this->orderModel) {
-            $viewod = $this->orderModel->viewod();  // Gọi phương thức listOrder từ OrderModel
 
-            if ($viewod) {
-                // Truyền dữ liệu đơn hàng vào view
-                require_once 'views/order/viewsorder.php';
-            } else {
-                echo "No orders found.";
-            }
+    // Hiển thị chi tiết đơn hàng
+    public function viewOrderDetails() {
+        if (isset($_GET['order_id'])) {
+            $orderId = $_GET['order_id'];
+            $orderDetails = $this->orderModel->getOrderDetails($orderId);
+            require_once 'views/order/viewsorder.php';
         } else {
-            echo "Error: Order model is not initialized.";
+            echo "Không tìm thấy mã đơn hàng.";
         }
     }
 }

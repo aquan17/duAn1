@@ -199,26 +199,34 @@ public function getProductColors($product_id)
 // Fetch comments for a specific product
 public function getProductComments($product_id)
 {
-    $sql = "SELECT * FROM comments WHERE product_id = :product_id ORDER BY created_at DESC";
+    // Câu lệnh SQL kết hợp bảng comments với bảng users để lấy thêm username của người bình luận
+    $sql = "SELECT comments.*, user.username 
+            FROM comments 
+            JOIN user ON comments.user_id = user.user_id 
+            WHERE comments.product_id = :product_id 
+            ORDER BY comments.created_at DESC";
+    
+    // Chuẩn bị và thực thi câu lệnh SQL
     $stmt = $this->conn->prepare($sql);
     $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetchAll();
+    
+    // Trả về tất cả các bình luận, kèm theo username
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
 // Add a comment for a product
-public function addComment($product_id, $user_id, $comment_name, $comment_email, $comment_text)
+public function addComment($product_id, $user_id,  $comment_text)
 {
     try {
-        $sql = "INSERT INTO comments (product_id, user_id, full_name, email, note) 
-                VALUES (:product_id, :user_id, :full_name, :email, :note)";
+        $sql = "INSERT INTO comments (product_id, user_id,  note) 
+                VALUES (:product_id, :user_id, :note)";
         $stmt = $this->conn->prepare($sql);
 
         // Gắn tham số cho câu lệnh SQL
         $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->bindParam(':full_name', $comment_name, PDO::PARAM_STR);
-        $stmt->bindParam(':email', $comment_email, PDO::PARAM_STR);
         $stmt->bindParam(':note', $comment_text, PDO::PARAM_STR);
 
         // Thực thi câu lệnh SQL

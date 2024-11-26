@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
     <style>
-   .error {
-    color: red !important;
-    font-size: 14px !important;
-    margin-top: 5px !important;
-    display: block !important;
-}
-
-</style>
+        .error {
+            color: red !important;
+            font-size: 14px !important;
+            margin-top: 5px !important;
+            display: block !important;
+        }
+    </style>
 
 </head>
+
 <body>
- <?php  require_once 'menu.php' ?>
+    <?php require_once 'menu.php' ?>
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-option">
         <div class="container">
@@ -46,93 +46,115 @@
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <h6 class="checkout__title">Payment</h6>
+
+                            <!-- Tên -->
                             <div class="checkout__input">
-                                        <p>Tên<span>*</span></p>
-                                        <input type="text" id="full_name" name="full_name" value="<?= $user['username'] ?>">
-                                        <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
-                            </div>
-                            <div class="checkout__input">
-                                <p>Địa Chỉ<span>*</span></p>
-                                <input type="text" placeholder="Đường phố" id="address" name="address" value="<?= $user['address'] ?>">
-                                <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
-                            </div>
-                            <div class="checkout__input">
-                                <p>Thành Phố<span>*</span></p>
-                                <input type="text" id="city" name="city">
-                                <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
+                                <p>Tên<span>*</span></p>
+                                <input type="text" id="full_name" name="full_name" value="<?= $user['username'] ?>" required>
+                                <p class="error" id="full_name_error"></p> <!-- Thông báo lỗi dưới ô input -->
                             </div>
 
+                            <!-- Địa Chỉ -->
+                            <div class="checkout__input">
+                                <p>Địa Chỉ<span>*</span></p>
+                                <input type="text" placeholder="Đường phố" id="address" name="address" value="<?= $user['address'] ?>" required>
+                                <p class="error" id="address_error"></p> <!-- Thông báo lỗi dưới ô input -->
+                            </div>
+
+                            <!-- Thành Phố -->
+                            <div class="checkout__input">
+                                <p>Thành Phố<span>*</span></p>
+                                <input type="text" id="city" name="city" required>
+                                <p class="error" id="city_error"></p> <!-- Thông báo lỗi dưới ô input -->
+                            </div>
+
+                            <!-- Số Điện Thoại -->
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
-                                        <p>SDT<span>*</span></p>
-                                        <input type="text" id="phone" name="phone" value="<?= $user['phone_number'] ?>">
-                                        <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
+                                        <p>Số Điện Thoại<span>*</span></p>
+                                        <input type="text" id="phone" name="phone" value="<?= $user['phone_number'] ?>" required>
+                                        <p class="error" id="phone_error"></p> <!-- Thông báo lỗi dưới ô input -->
                                     </div>
                                 </div>
+
+                                <!-- Email -->
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
-                                        <input type="text" id="email" name="email" value="<?= $user['email'] ?>">
-                                        <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
+                                        <input type="email" id="email" name="email" value="<?= $user['email'] ?>" required>
+                                        <p class="error" id="email_error"></p> <!-- Thông báo lỗi dưới ô input -->
                                     </div>
                                 </div>
                             </div>
 
+                            <!-- Ghi Chú -->
                             <div class="checkout__input">
                                 <p>Ghi Chú<span>*</span></p>
                                 <input type="text" placeholder="Ghi chú về đơn hàng của bạn" id="note" name="note">
-                                <p class="error"></p> <!-- Thông báo lỗi dưới ô input -->
+                                <p class="error" id="note_error"></p> <!-- Thông báo lỗi dưới ô input -->
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                        <div class="checkout__order">
-                            <h4 class="order__title">Your order</h4>
-                            <div class="checkout__order__products">Product <span>Total</span></div>
-                            <ul class="checkout__total__products">
-                                <?php
-                                if (isset($_SESSION['carts']) && !empty($_SESSION['carts'])) {
-                                    foreach ($_SESSION['carts'] as $value) {
-                                        echo "<li>{$value['title']} <span>" . number_format($value['price'] * $value['qty']) . "đ</span></li>";
-                                    }
-                                }
-                                ?>
-                            </ul>
-                            <ul class="checkout__total__all">
-                                <li>Total <span><?php echo number_format($_SESSION['sum_price']); ?>đ</span></li>
-                            </ul>
-                            <div class="checkout__input__checkbox">
-                                <label for="acc-or">
-                                    Create an account?
-                                    <input type="checkbox" id="acc-or">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
 
-                            <div class="checkout__input__checkbox">
-                                <label for="payment">
-                                    Check Payment
-                                    <input type="checkbox" id="payment">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="paypal">
-                                    Paypal
-                                    <input type="checkbox" id="paypal">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <button type="submit" class="site-btn">PLACE ORDER</button>
-                        </div>
-                        </div>
-                    </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="checkout__order">
+                                <h4 class="order__title">Your order</h4>
+                                <div class="checkout__order__products">Product <span>Total</span></div>
+                                <ul class="checkout__total__products">
+
+                                    <?php
+                                    // Hiển thị các sản phẩm đã chọn từ giỏ hàng
+                                    $selected_products = isset($_POST['selected_products']) ? explode(',', $_POST['selected_products']) : [];
+                                    $total_price = 0; // Initialize total price
+
+                                    foreach ($_SESSION['carts'] as $product_id => $product) {
+                                        if (in_array($product_id, $selected_products)) {
+                                            $product_total = $product['price'] * $product['qty'];
+                                            echo "<li>{$product['title']} <span>" . number_format($product_total) . "đ</span></li>";
+                                            $total_price += $product_total; // Add the product total to the total price
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                                <ul class="checkout__total__all">
+                                    <li>Total <span><?php echo number_format($total_price); ?>đ</span></li>
+                                </ul>
+
+
+                                <!-- Phương thức thanh toán -->
+                                <div class="checkout__input__checkbox">
+                                    <label for="acc-or">
+                                        Create an account?
+                                        <input type="checkbox" id="acc-or">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <div class="checkout__input__checkbox">
+                                    <label for="payment">
+                                        Check Payment
+                                        <input type="checkbox" id="payment">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="checkout__input__checkbox">
+                                    <label for="paypal">
+                                        Paypal
+                                        <input type="checkbox" id="paypal">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <button type="submit" class="site-btn">PLACE ORDER</button>
                 </form>
             </div>
         </div>
+        </div>
+        </div>
+        </div>
     </section>
+
     <!-- Checkout Section End -->
-<?php require_once 'footer.php' ?>
+    <?php require_once 'footer.php' ?>
     <script>
         function validateForm() {
             var fullName = document.getElementById("full_name").value;
@@ -143,7 +165,7 @@
             var note = document.getElementById("note").value;
 
             var errorMessages = {};
-            
+
             if (fullName == "") {
                 errorMessages['full_name'] = "*Tên không được bỏ trống.";
             }
@@ -164,7 +186,7 @@
 
             var errorFields = document.querySelectorAll('.error');
             errorFields.forEach(function(field) {
-                field.innerHTML = '';  // Xóa các lỗi trước đó
+                field.innerHTML = ''; // Xóa các lỗi trước đó
             });
 
             var isValid = true;
@@ -177,7 +199,7 @@
                 }
             }
 
-            return isValid;  // Nếu có lỗi, không gửi form
+            return isValid; // Nếu có lỗi, không gửi form
         }
 
         function validateEmail(email) {
@@ -186,4 +208,5 @@
         }
     </script>
 </body>
+
 </html>

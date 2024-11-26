@@ -1,37 +1,36 @@
 <?php
-require_once "../commons/function.php"; // Kết nối database
+require_once "../commons/function.php"; // Kết nối cơ sở dữ liệu
 
 class Order {
-    public $conn = null;
+    private $conn;
 
     public function __construct() {
-        $this->conn = connectDB(); // Hàm kết nối DB (cần xác định hàm connectDB() trong function.php)
+        $this->conn = connectDB();
     }
 
-    // Phương thức lấy danh sách đơn hàng
-    public function listOrder() {
-        $sql = "SELECT * from orders where  order_id";
-    
+    // Lấy danh sách đơn hàng
+    public function listOrders() {
+        $sql = "SELECT * FROM orders";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-        // Debug: Kiểm tra dữ liệu trả về
-        // var_dump($result);
-        return $result;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function viewod() {
-        $sql = "SELECT products.title,order_details.quantity,order_details.price from products INNER JOIN order_details ON products.product_id = order_details.product_id ";
-    
+
+    // Lấy chi tiết sản phẩm của một đơn hàng
+    public function getOrderDetails($orderId) {
+        $sql = "
+            SELECT 
+                products.title AS product_name, 
+                order_details.quantity, 
+                order_details.price, 
+                (order_details.price * order_details.quantity) AS total_money
+            FROM order_details
+            INNER JOIN products ON products.product_id = order_details.product_id
+            WHERE order_details.order_id = :order_id";
+        
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-        // Debug: Kiểm tra dữ liệu trả về
-        // var_dump($result);
-        return $result;
+        $stmt->execute(['order_id' => $orderId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
 }
 ?>
