@@ -31,6 +31,7 @@ match("$ctl") {
 
    "order" => (new OrderController())->listOrders(),
     "viewod" => (new OrderController())->viewOrderDetails(),
+    "updateStatus" => (new OrderController())->updateOrderStatus(),
 
     "user-list" => (new UserController())->list(),
     "user-store" => (new UserController())->store(),

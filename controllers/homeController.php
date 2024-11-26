@@ -216,21 +216,27 @@ class homeController
         require_once 'views/checkout.php';
     }
     
-public function placeOrder($full_name,$address, $city, $phone, $email, $note)
+// controllers/homeController.php
+
+// controllers/homeController.php
+
+// controllers/homeController.php
+
+public function placeOrder($full_name, $address, $city, $phone, $email, $note)
 {
     // Lấy dữ liệu sản phẩm trong giỏ hàng
     $productsInCart = isset($_SESSION['carts']) ? $_SESSION['carts'] : [];
     $totalPrice = $_SESSION['sum_price']; // Tổng tiền
 
-    // Lưu thông tin đơn hàng vào cơ sở dữ liệu
-    $order_id = $this->homeModel->createOrder($full_name,  $address, $city, $phone, $email, $note, $totalPrice);
+    // Lưu thông tin đơn hàng vào cơ sở dữ liệu và nhận ID đơn hàng cùng order_code
+    list($order_id, $order_code) = $this->homeModel->createOrder($full_name, $address, $city, $phone, $email, $note, $totalPrice);
 
-    // Sau khi tạo đơn hàng, lưu thông tin chi tiết đơn hàng vào bảng order_details
     $order_items = []; // Mảng chứa thông tin các sản phẩm trong đơn hàng
+    // Lưu thông tin chi tiết đơn hàng vào bảng order_details và truyền order_code
     foreach ($productsInCart as $product_id => $product) {
-        // Lưu thông tin chi tiết vào bảng order_details
-        $this->homeModel->createOrderDetails($order_id, $product_id, $product['qty'], $product['price']);
-        // Thêm sản phẩm vào mảng $order_items để lưu vào session
+        $this->homeModel->createOrderDetails($order_id, $product_id, $product['qty'], $product['price'], $order_code);
+
+        // Thêm sản phẩm vào mảng order_items
         $order_items[] = [
             'title' => $product['title'],
             'quantity' => $product['qty'],
@@ -250,14 +256,16 @@ public function placeOrder($full_name,$address, $city, $phone, $email, $note)
         'email' => $email,
         'address' => $address,
         'city' => $city,
-        'total_money' => $totalPrice,  // Sử dụng biến $totalPrice
-        'items' => $order_items, // Đây là mảng chứa thông tin các sản phẩm trong đơn hàng
+        'total_money' => $totalPrice,
+        'items' => $order_items, // Lưu thông tin sản phẩm vào session
     ];
 
     // Chuyển hướng đến trang thành công hoặc thông báo đặt hàng thành công
     header("Location: views/success.php"); // Chuyển hướng đến trang thành công
     exit();
 }
+
+
 public function updateProfile($id)
 {
 

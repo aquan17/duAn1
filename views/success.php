@@ -4,12 +4,13 @@ session_start();
 // Kiểm tra xem có thông tin đơn hàng trong session hay không
 if (isset($_SESSION['order_info'])) {
     $order_info = $_SESSION['order_info']; // Lấy thông tin đơn hàng từ session
-    unset($_SESSION['order_info']); // Xóa thông tin đơn hàng sau khi hiển thị
+    // unset($_SESSION['order_info']); // Xóa thông tin đơn hàng sau khi hiển thị
 } else {
     // Nếu không có thông tin đơn hàng trong session, chuyển hướng về trang chủ
-    header("Location: ?act=shop");
+    // header("Location: ?act=shop");
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -120,7 +121,7 @@ if (isset($_SESSION['order_info'])) {
 
         <!-- Link quay lại trang chủ -->
         <div class="back-link">
-            <a href="?act=shop">Back to Home</a>
+            <a href="../?act=shop">Back to Home</a>
         </div>
     </div>
 

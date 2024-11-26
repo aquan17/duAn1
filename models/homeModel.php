@@ -86,38 +86,55 @@ class homeModel
 
         require_once 'views/shopping-cart.php';
     }
-    public function createOrder($full_name, $address, $city, $phone, $email, $note, $totalPrice)
-    {
-        $sql = "INSERT INTO orders (full_name, address, city, phone, email, note, total_price, order_date)
+    // models/homeModel.php
+
+public function createOrderDetails($order_id, $product_id, $qty, $price, $order_code)
+{
+    $sql = "INSERT INTO order_details (order_id, product_id, quantity, price, total_money, order_code)
+            VALUES (:order_id, :product_id, :quantity, :price, :total_money, :order_code)";
+    
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+        'order_id' => $order_id,
+        'product_id' => $product_id,
+        'quantity' => $qty,
+        'price' => $price,
+        'total_money' => $price * $qty,
+        'order_code' => $order_code // Lưu order_code vào bảng order_details
+    ]);
+}
+
+    // models/homeModel.php
+
+public function createOrder($full_name, $address, $city, $phone, $email, $note, $totalPrice)
+{
+    // Tạo mã đơn hàng ngẫu nhiên
+    $orderCode = $this->generateOrderCode();
+
+    // Lưu thông tin đơn hàng vào bảng orders
+    $sql = "INSERT INTO orders (full_name, address, city, phone, email, note, total_price, order_date)
                 VALUES (:full_name,:address, :city, :phone, :email, :note, :total_price, NOW())";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':full_name', $full_name);
-        $stmt->bindParam(':address', $address);
-        $stmt->bindParam(':city', $city);
-        $stmt->bindParam(':phone', $phone);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':note', $note);
-        $stmt->bindParam(':total_price', $totalPrice);
-        
-        $stmt->execute();
-    
-        // Trả về ID của đơn hàng vừa tạo
-        return $this->conn->lastInsertId();
-    }
-    public function createOrderDetails($order_id, $product_id, $qty, $price)
-    {
-        $sql = "INSERT INTO order_details (order_id, product_id, quantity, price)
-                VALUES (:order_id, :product_id, :quantity, :price)";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        $stmt->bindParam(':product_id', $product_id);
-        $stmt->bindParam(':quantity', $qty);
-        $stmt->bindParam(':price', $price);
-    
-        $stmt->execute();
-        }
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+        'full_name' => $full_name,
+        'address' => $address,
+        'city' => $city,
+        'phone' => $phone,
+        'email' => $email,
+        'note' => $note,
+        'total_price' => $totalPrice
+    ]);
+
+    $orderId = $this->conn->lastInsertId(); // Lấy ID của đơn hàng vừa tạo
+
+    // Sau khi tạo đơn hàng, lưu thông tin chi tiết đơn hàng vào bảng order_details
+    return [$orderId, $orderCode]; // Trả về ID của đơn hàng và order_code
+}
+
+public function generateOrderCode() {
+    return '#' . rand(1000, 9999); // Sinh mã đơn hàng ngẫu nhiên
+}
+
         public function updateUserInfo($id, $name, $email, $phone, $address)
 {
     $sql = "UPDATE user SET username = ?, email = ?, phone_number = ?, address = ? WHERE user_id = ?";
@@ -202,7 +219,7 @@ public function getProductComments($product_id)
     // Câu lệnh SQL kết hợp bảng comments với bảng users để lấy thêm username của người bình luận
     $sql = "SELECT comments.*, user.username 
             FROM comments 
-            JOIN user ON comments.user_id = user.user_id 
+            JOIN user ON comments.user_id = users.user_id 
             WHERE comments.product_id = :product_id 
             ORDER BY comments.created_at DESC";
     
