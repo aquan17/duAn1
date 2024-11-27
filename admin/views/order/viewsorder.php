@@ -93,6 +93,13 @@
             font-weight: bold;
             color: #dc3545;
         }
+
+        /* Hiển thị mã đơn hàng */
+        .order-code {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
@@ -104,10 +111,13 @@
     <div class="content">
         <h2 class="mb-4">Chi tiết đơn hàng</h2>
         
+        <!-- Hiển thị Mã Đơn Hàng -->
+       
+
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    
+                    <th>Mã Đơn Hàng</th>
                     <th>Tên sản phẩm</th>
                     <th>Số lượng</th>
                     <th>Đơn giá</th>
@@ -121,8 +131,7 @@
                     $total += $item['total_money']; 
                 ?>
                     <tr>
-
-                        
+                        <td><?= $item['order_code']; ?></td>
                         <td><?= $item['product_name']; ?></td>
                         <td><?= $item['quantity']; ?></td>
                         <td><?= number_format($item['price']) . 'đ'; ?></td>

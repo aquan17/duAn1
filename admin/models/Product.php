@@ -22,14 +22,14 @@ class Product {
     }
 
     public function insert($data) {
-        $sql = "INSERT INTO products (title, discount, image, description, price, quantity, category_id) VALUES (:title, :discount, :image, :description, :price, :quantity, :category_id)";
+        $sql = "INSERT INTO products (title, discount, image, description, price, quantity, category_id, classify) VALUES (:title, :discount, :image, :description, :price, :quantity, :category_id, :classify)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($data);
     }
 
     public function update($data) {
-        var_dump($data);
-        $sql = "UPDATE products SET title=:title, discount=:discount, image=:image, description=:description, price=:price, quantity=:quantity, category_id=:category_id WHERE product_id=:id";
+       
+        $sql = "UPDATE products SET title=:title, discount=:discount, image=:image, description=:description, price=:price, quantity=:quantity, category_id=:category_id, classify=:classify WHERE product_id=:id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($data);
     }

@@ -1,3 +1,4 @@
+<!-- views/order/listorder.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,16 +14,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
+        /* Các kiểu định dạng */
         body {
-            background-color: #f8f9fa; /* Màu nền dịu nhẹ */
+            background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
         }
 
-       
-
-        /* Làm cho phần nội dung chiếm toàn bộ chiều rộng */
         .container-fluid {
             padding: 20px;
             background-color: #fff;
@@ -37,9 +36,8 @@
             margin-bottom: 20px;
         }
 
-        /* Bảng */
         .table {
-            width: 100%; /* Chiếm toàn bộ chiều rộng */
+            width: 100%;
             background-color: #f9f9f9;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
@@ -108,11 +106,6 @@
             color: #dc3545;
         }
 
-        .btn-action {
-            font-size: 0.9rem;
-            padding: 5px 10px;
-        }
-
         .table-container {
             max-width: 100%;
             overflow-x: auto;
@@ -128,45 +121,49 @@
         <div class="container-fluid">
             <h2>Danh sách đơn hàng</h2>
             <div class="table-container">
-            <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID Đơn Hàng</th>
-                    <th>Tên Khách Hàng</th>
-                    <th>Địa Chỉ</th>
-                    <th>Email</th>
-                    <th>Số Điện Thoại</th>
-                    <th>Tình Trạng</th>
-                    <th>Ngày Đặt</th>
-                    <th>Quản Lý</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                
-                <?php 
-                $i = 1;
-                foreach ($orders as $order): ?>
-                    <tr>
-                        <td><?php echo $order['order_id']  ;?></td>
-                        <td><?php echo $order['last_name']; echo $order['first_name']; ?></td>
-                        <td><?php echo $order['address']; ?></td>
-                        <td><?php echo $order['email']; ?></td>
-                        <td><?php echo $order['phone']; ?></td>
-
-                        
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID Đơn Hàng</th>
+                            <th>Tên Khách Hàng</th>
+                            <th>Địa Chỉ</th>
+                            <th>Email</th>
+                            <th>Số Điện Thoại</th>
+                            <th>Tình Trạng</th>
+                            <th>Ngày Đặt</th>
+                            <th>Quản Lý</th>
+                            <th>Xử Lý Đơn Hàng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($orders as $order): ?>
+                            <tr>
+                                <td><?php echo $order['order_id']; ?></td>
+                                <td><?php echo $order['full_name']; ?></td>
+                                <td><?php echo $order['address']; ?></td>
+                                <td><?php echo $order['email']; ?></td>
+                                <td><?php echo $order['phone']; ?></td>
                                 <td>
-                                    <?= $order['status'] == 1 
-                                        ? '<span class="badge badge-success">Đã xử lý</span>' 
-                                        : ($order['status'] == 2 
-                                            ? '<span class="badge badge-warning text-dark">Đang xử lý</span>' 
+                                    <?= $order['status'] == 1
+                                        ? '<span class="badge badge-success">Đã xử lý</span>'
+                                        : ($order['status'] == 2
+                                            ? '<span class="badge badge-warning text-dark">Đang xử lý</span>'
                                             : '<span class="badge badge-secondary">Chưa xử lý</span>'
                                         ); ?>
                                 </td>
                                 <td><?php echo $order['order_date']; ?></td>
                                 <td>
                                     <a href="index.php?ctl=viewod&order_id=<?= $order['order_id']; ?>" class="btn btn-primary btn-sm">Xem chi tiết</a>
-                                    <!-- <a href="index.php?ctl=order-delete&order_id=<?= $order['order_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a> -->
+                                </td>
+                                <td>
+                                    <form action="index.php?ctl=updateStatus" method="POST">
+                                        <input type="hidden" name="order_id" value="<?= $order['order_id']; ?>">
+                                        <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                                            <option value="1" <?= $order['status'] == 1 ? 'selected' : ''; ?>>Đã xử lý</option>
+                                            <option value="2" <?= $order['status'] == 2 ? 'selected' : ''; ?>>Đang xử lý</option>
+                                            <option value="3" <?= $order['status'] == NULL ? 'selected' : ''; ?>>Chưa xử lý</option>
+                                        </select>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

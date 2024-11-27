@@ -132,6 +132,8 @@
                     </option>
                 <?php endforeach; ?>
             </select>
+            <label for="classify">Phân Loại</label>
+            <input type="number" id="classify" name="classify" value="<?= $product['classify'] ?>">
 
             <button type="submit">Lưu</button>
         </form>

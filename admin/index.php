@@ -2,13 +2,13 @@
 require_once "../commons/function.php";
 require_once "models/Product.php";
 require_once "models/Category.php";
-require_once "models/User.php";
 require_once "models/Order.php";
+require_once "models/User.php";
 
-require_once "controllers/ProductController.php";
-require_once "controllers/CategoryController.php";
 require_once "controllers/UserController.php";
+require_once "controllers/ProductController.php";
 require_once "controllers/OrderController.php";
+require_once "controllers/CategoryController.php";
 
 require_once "controllers/dashboardController.php";
 
@@ -28,14 +28,15 @@ match("$ctl") {
     "category-store" => (new CategoryController())->store(),
     "category-edit" => (new CategoryController())->edit(),
     "category-delete" => (new CategoryController())->delete(),
-   
+
+   "order" => (new OrderController())->listOrders(),
+    "viewod" => (new OrderController())->viewOrderDetails(),
+    "updateStatus" => (new OrderController())->updateOrderStatus(),
+
     "user-list" => (new UserController())->list(),
     "user-store" => (new UserController())->store(),
     "user-edit" => (new UserController())->edit(),
     "user-delete" => (new UserController())->delete(),
-    "order" => (new OrderController())->listOrders(),
-    "viewod" => (new OrderController())->viewOrderDetails(),
-    
     
     default => view('404'),
 };

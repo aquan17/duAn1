@@ -91,61 +91,76 @@
     </section>
     <!-- Product Section Begin -->
     <section class="product spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="filter__controls">
-                        <li class="active" data-filter="*">Best Sellers</li>
-                        <li data-filter=".new-arrivals">New Arrivals</li>
-                        <li data-filter=".hot-sales">Hot Sales</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row product__filter">
-                <?php if ($products): ?>
-                    <?php foreach ($products as $product): ?>
-                        <div class="col-lg-3 col-md-6 col-sm-6 mix new-arrivals">
-                            <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?php echo htmlspecialchars($product['image']); ?>">
-                                <a href="?act=details&id=<?= $product['product_id'] ?>">
-                                                <img src="./assets/images/product/<?= $product['image'] ?>" alt="Product Image" >
-                                            </a>
-                                <span class="label">New</span>
-                                    <ul class="product__hover">
-                                        <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
-                                        <li><a href="#"><img src="./assets/images/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                        <li><a href="#"><img src="./assets/images/icon/search.png" alt=""></a></li>
-                                    </ul>
-                                </div>
-                                <div class="product__item__text">
-                                    <h6><?php echo htmlspecialchars($product['title']); ?></h6>
-                                    <?php if (isset($_SESSION['user'])): ?>  <!-- Check if user is logged in -->
-                            <form method="post" action="?act=spCart&id=<?= $product['product_id'] ?>">
-                                <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>" />
-                                <a href="" class="add-cart"> <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button></a>
-                            </form>
-                        <?php else: ?>
-                            <a href="?act=login" id="loginBtn" class="add-cart"><button style="border: none;">+ Please Log In to Add To Cart</button></a> <!-- Redirect to login -->
-                            <?php endif; ?>
-                                    <div class="rating">
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
-                                    <h5><?php echo htmlspecialchars(number_format($product['price'])) . 'đ'; ?></h5>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>Không có sản phẩm nào.</p>
-                <?php endif; ?>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="filter__controls">
+                    <li data-filter=".best-sellers">Best Sellers</li>
+                    <li data-filter=".new-arrivals">New Arrivals</li>
+                    <li data-filter=".hot-sales">Hot Sales</li>
+                </ul>
             </div>
         </div>
-        <!-- Categories Section Begin -->
-    </section>
+        <div class="row product__filter">
+            <?php if ($products): ?>
+                <?php foreach ($products as $product): ?>
+                    <!-- Phân loại sản phẩm bằng toán tử 3 ngôi -->
+                    <?php
+                        $class = '';  // Biến lưu class phân loại
+                        if ($product['classify'] == 1) {
+                            $class = 'best-sellers';  // Best Sellers
+                        } elseif ($product['classify'] == 2) {
+                            $class = 'new-arrivals';  // New Arrivals
+                        } elseif ($product['classify'] == 3) {
+                            $class = 'hot-sales';  // Hot Sales
+                        }
+                    ?>
+                    <div class="col-lg-3 col-md-6 col-sm-6 mix <?= $class; ?>">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?php echo htmlspecialchars($product['image']); ?>">
+                                <a href="?act=details&id=<?= $product['product_id'] ?>">
+                                    <img src="./assets/images/product/<?= $product['image'] ?>" alt="Product Image" >
+                                </a>
+                                <span class="label">New</span>
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
+                                    <li><a href="#"><img src="./assets/images/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                                    <li><a href="#"><img src="./assets/images/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6><?php echo htmlspecialchars($product['title']); ?></h6>
+                                <?php if (isset($_SESSION['user'])): ?>  <!-- Check if user is logged in -->
+                                    <form method="post" action="?act=spCart&id=<?= $product['product_id'] ?>">
+                                        <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>" />
+                                        <a href="" class="add-cart"> 
+                                            <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button>
+                                        </a>
+                                    </form>
+                                <?php else: ?>
+                                    <a href="?act=login" id="loginBtn" class="add-cart">
+                                        <button style="border: none;">+ Please Log In to Add To Cart</button>
+                                    </a> <!-- Redirect to login -->
+                                <?php endif; ?>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5><?php echo htmlspecialchars(number_format($product['price'])) . 'đ'; ?></h5>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Không có sản phẩm nào.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
+
     <section class="categories spad">
         <div class="container">
             <div class="row">

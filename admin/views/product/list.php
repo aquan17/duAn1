@@ -125,6 +125,8 @@
         <td><?= number_format($product['price']).'đ' ?></td>
         <td><?= $product['quantity'] ?></td>
         <td><?= $product['category_id'] ?></td>
+        <td><?= $product['classify'] ?></td>
+        
         <td>
             <a href="index.php?ctl=product-edit&id=<?= $product['product_id'] ?>"><button class="btn btn-warning">Sửa</button></a>
             <a href="index.php?ctl=product-delete&id=<?= $product['product_id'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><button class="btn btn-danger">Xóa</button></a>

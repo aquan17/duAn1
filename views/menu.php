@@ -67,7 +67,9 @@
                                 <li><a href="?act=Cart">Đơn hàng của tôi</a></li>
                                 <li><a href="?act=logout" class="logout-btn">Đăng Xuất</a></li>
                             </ul>
+
                         </div>
+                        <p style="color: crimson;">Xin Chào, <?= $_SESSION['user']  ?>!</p>
                     <?php else: ?>
                         <!-- Hiển thị nút Đăng nhập khi chưa đăng nhập -->
                         <a href="?act=login" id="loginBtn">
@@ -75,7 +77,6 @@
                             <span class="dropdown-text">Đăng Nhập</span>
                         </a>
                     <?php endif; ?>
-
 
                 </div>
                 <div id="searchContainer" style="display: none;">
