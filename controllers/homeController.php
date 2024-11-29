@@ -119,9 +119,11 @@ class homeController
     public function shop_details($id)
     {
         // Lấy thông tin chi tiết sản phẩm
-        $s_details = $this->homeModel->findProductById($id);  
+        $s_details = $this->homeModel->findProductById($id);
+        $relatedProducts = $this->homeModel->getRelatedProducts($id); // Lấy sản phẩm liên quan  
+        $randomProducts = $this->homeModel->getRandomProducts($id); // Lấy 3 sản phẩm ngẫu nhiên từ danh mục 2 hoặc 3
         // Lấy các size và màu sắc của sản phẩm
-        $sizes = $this->homeModel->getProductSizes($id);  
+        // $sizes = $this->homeModel->getProductSizes($id);  
         $colors = $this->homeModel->getProductColors($id);
     
         // Kiểm tra nếu tìm thấy sản phẩm, sau đó hiển thị
@@ -131,6 +133,7 @@ class homeController
         } else {
             echo 'Product not found';  // Nếu không tìm thấy sản phẩm
         }
+        
     }
     function renderinfo(){
         $profile = $_SESSION['user'];
@@ -333,9 +336,11 @@ public function productDetails($id)
 {
     // Lấy thông tin chi tiết sản phẩm
     $s_details = $this->homeModel->findProductById($id);
+    $randomProducts = $this->homeModel->getRandomProducts($id); // Lấy 3 sản phẩm ngẫu nhiên từ danh mục 2 hoặc 3
     
     // Lấy các bình luận cho sản phẩm
     $comments = $this->homeModel->getProductComments($id);
+    
 
     // Nếu không có bình luận, khởi tạo thành mảng rỗng
     if (!$comments) {
@@ -371,6 +376,7 @@ public function productDetails($id)
 
     // Hiển thị chi tiết sản phẩm và bình luận trong view
     require_once 'views/shop-details.php';  // Load view chi tiết sản phẩm và bình luận
+    require_once 'views/comment.php';
 }
 
 

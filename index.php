@@ -70,7 +70,7 @@ switch ($act) {
     case "history" :
          (new homeController())->odhistory();
          break;
-         case "comments" :
+    case "comments" :
             (new homeController())->productDetails($id);
             break;
     default:

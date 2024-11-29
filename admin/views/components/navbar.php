@@ -51,7 +51,7 @@
         </ul>
         <ul class="side-menu">
             <li>
-                <a href="index.php?ctl=user-list">
+                <a href="index.php?ctl=comment-list">
                     <i class='bx bxs-cog'></i>
                     <span class="text">Settings</span>
                 </a>
