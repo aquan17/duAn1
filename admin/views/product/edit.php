@@ -124,14 +124,16 @@
             <input type="number" id="quantity" name="quantity" value="<?= $product['quantity'] ?>">
 
             <label for="category_id">Danh Mục:</label>
-            <select id="category_id" name="category_id" required>
-                <option value="">-- Chọn Danh Mục --</option>
-                <?php foreach ($categories as $category): ?>
-                    <option value="<?= $category['category_id']; ?>" <?= $category['category_id'] == $product['category_id'] ? 'selected' : '' ?>>
-                        <?= $category['category_name']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <select name="category_id" id="category_id">
+    <?php if (!empty($categories)): ?>
+        <?php foreach ($categories as $category): ?>
+            <option value="<?= $category['category_id']; ?>"><?= $category['category_name']; ?></option>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <option value="6">Không xác định</option>
+    <?php endif; ?>
+</select>
+
             <label for="classify">Phân Loại</label>
             <input type="number" id="classify" name="classify" value="<?= $product['classify'] ?>">
 

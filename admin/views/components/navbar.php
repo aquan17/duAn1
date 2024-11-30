@@ -48,12 +48,18 @@
                     <span class="text">Quản Lý Đơn Hàng</span>
                 </a>
             </li>
+            <li>
+                <a href="">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Thống Kê</span>
+                </a>
+            </li>
         </ul>
         <ul class="side-menu">
             <li>
                 <a href="index.php?ctl=comment-list">
                     <i class='bx bxs-cog'></i>
-                    <span class="text">Settings</span>
+                    <span class="text">Comment</span>
                 </a>
             </li>
             <li>

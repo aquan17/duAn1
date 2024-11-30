@@ -4,7 +4,7 @@ require_once "../commons/function.php"; // Kết nối cơ sở dữ liệu
 
 class Order
 {
-    private $conn;
+    public $conn;
 
     public function __construct()
     {
