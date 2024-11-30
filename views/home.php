@@ -118,7 +118,7 @@
                     <div class="col-lg-3 col-md-6 col-sm-6 mix <?= $class; ?>">
                         <div class="product__item">
                             <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?php echo htmlspecialchars($product['image']); ?>">
-                                <a href="?act=details&id=<?= $product['product_id'] ?>">
+                                <a href="?act=comments&id=<?= $product['product_id'] ?>">
                                     <img src="./assets/images/product/<?= $product['image'] ?>" alt="Product Image" >
                                 </a>
                                 <span class="label">New</span>

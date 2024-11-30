@@ -216,19 +216,16 @@ public function getProductColors($product_id)
 // Fetch comments for a specific product
 public function getProductComments($product_id)
 {
-    // Câu lệnh SQL kết hợp bảng comments với bảng users để lấy thêm username của người bình luận
     $sql = "SELECT comments.*, user.username 
             FROM comments 
-            JOIN user ON comments.user_id = users.user_id 
-            WHERE comments.product_id = :product_id 
+            JOIN user ON comments.user_id = user.user_id 
+            WHERE comments.product_id = :product_id AND comments.status = 1 
             ORDER BY comments.created_at DESC";
     
-    // Chuẩn bị và thực thi câu lệnh SQL
     $stmt = $this->conn->prepare($sql);
     $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
     $stmt->execute();
     
-    // Trả về tất cả các bình luận, kèm theo username
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -237,25 +234,32 @@ public function getProductComments($product_id)
 public function addComment($product_id, $user_id,  $comment_text)
 {
     try {
-        $sql = "INSERT INTO comments (product_id, user_id,  note) 
-                VALUES (:product_id, :user_id, :note)";
+        $sql = "INSERT INTO comments (product_id, user_id, note, status) 
+                VALUES (:product_id, :user_id, :note, 3)";  // Thêm giá trị mặc định cho status (chưa xử lý)
         $stmt = $this->conn->prepare($sql);
 
-        // Gắn tham số cho câu lệnh SQL
         $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindParam(':note', $comment_text, PDO::PARAM_STR);
 
-        // Thực thi câu lệnh SQL
         $stmt->execute();
-        return true; // Trả về true nếu thành công
+        return true;
     } catch (Exception $e) {
-        // In ra lỗi nếu có
         echo "Error: " . $e->getMessage();
-        return false; // Trả về false nếu có lỗi
+        return false;
     }
 }
+function getRelatedProducts($id) {
+    $sql = "SELECT * FROM products WHERE product_id != $id LIMIT 2";  // Lấy 2 sản phẩm liên quan không bao gồm sản phẩm hiện tại
+    return $this->conn->query($sql);
+}
+
+function getRandomProducts($excludeId) {
+    $sql = "SELECT * FROM products WHERE category_id IN (1,2, 3,4,5) AND product_id != $excludeId ORDER BY RAND() LIMIT 4";
+    // Lấy 3 sản phẩm ngẫu nhiên từ danh mục 2 hoặc 3, không bao gồm sản phẩm hiện tại
+    return $this->conn->query($sql)->fetchAll();    
 
 
+}
 
 }

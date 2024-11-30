@@ -49,6 +49,12 @@
                 </a>
             </li>
             <li>
+                <a href="?ctl=comment-list">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Quản Lý Bình Luận</span>
+                </a>
+            </li>
+            <li>
                 <a href="../?act=/">
                     <p style="margin: 8px;">🧋</p>
                     <span class="text">Shop</span>
