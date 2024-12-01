@@ -9,8 +9,16 @@ class CategoryController {
 
     public function delete() {
         $id = $_GET['id'];
-        (new Category())->delete($id);
-        header("Location:index.php?ctl=category-list");
+
+        // Xóa mềm: chuyển sản phẩm về danh mục "không xác định"
+        try {
+            (new Category())->delete($id);
+            $_SESSION['success'] = 'Danh mục và sản phẩm đã được chuyển về danh mục "không xác định"!';
+        } catch (Exception $e) {
+            $_SESSION['error'] = 'Có lỗi xảy ra khi xóa danh mục!';
+        }
+
+        header("Location: index.php?ctl=category-list");
         die;
     }
 
@@ -50,5 +58,7 @@ class CategoryController {
         // Hiển thị form chỉnh sửa
         view('category/edit', ['category' => $category]);
     }
-    
 }
+
+    
+

@@ -161,7 +161,7 @@
                                         <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
                                             <option value="1" <?= $order['status'] == 1 ? 'selected' : ''; ?>>Đã xử lý</option>
                                             <option value="2" <?= $order['status'] == 2 ? 'selected' : ''; ?>>Đang xử lý</option>
-                                            <option value="3" <?= $order['status'] == NULL ? 'selected' : ''; ?>>Chưa xử lý</option>
+                                            <option value="3" <?= $order['status'] == 3 ? 'selected' : ''; ?>>Hủy Đơn</option>
                                         </select>
                                     </form>
                                 </td>
