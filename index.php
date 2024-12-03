@@ -2,11 +2,16 @@
 session_start();
 // session_destroy();
 
+// csdl 
 require_once 'commons/function.php';
-require_once 'controllers/homeController.php';
+// models
 require_once 'models/homeModel.php';
 require_once 'models/accModel.php';
+require_once 'models/momo.php';
+// controller
+require_once 'controllers/homeController.php';
 require_once 'controllers/accController.php';
+require_once 'controllers/momoController.php';
 
 // Lấy id và act từ URL
 $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
@@ -23,9 +28,9 @@ switch ($act) {
     case 'spCart':
         (new homeController())->spCard($id);
         break;
-        case 'deleteCart':
-            (new homeController())->deleteProduct($id);
-            break;
+    case 'deleteCart':
+        (new homeController())->deleteProduct($id);
+        break;
     case 'Cart':
         (new homeModel())->Card();
         break;
@@ -39,12 +44,12 @@ switch ($act) {
             echo 'Product ID is missing.';
         }
         break;
-    case 'rendercheckout' :
+    case 'rendercheckout':
         (new homeController())->rendercheckout();
         break;
-        case 'profile' :
-            (new homeController())->renderinfo();
-            break;
+    case 'profile':
+        (new homeController())->renderinfo();
+        break;
     case 'checkout':
         (new homeController())->checkout();
         break;
@@ -59,23 +64,24 @@ switch ($act) {
         break;
     case 'auth':
         (new accController())->handleAuth();
-            break;
+        break;
     case 'updateProfile':
-             if ($id) {
-                    (new homeController())->updateProfile($id);
-            } else {
-                    echo 'User ID is missing.';
-             }
-             break;
-    case "history" :
-         (new homeController())->odhistory();
-         break;
-    case "comments" :
-            (new homeController())->productDetails($id);
-            break;
+        if ($id) {
+            (new homeController())->updateProfile($id);
+        } else {
+            echo 'User ID is missing.';
+        }
+        break;
+    case "history":
+        (new homeController())->odhistory();
+        break;
+    case "comments":
+        (new homeController())->productDetails($id);
+        break;
+    case "paypalMomo":
+        (new MomoController())->paypalMomo();
+        break;
     default:
         echo 'Page not found.';
         break;
 }
-?>
-

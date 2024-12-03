@@ -9,11 +9,15 @@ class Product {
     }
 
     public function all() {
-        $sql = "SELECT * FROM products ORDER BY product_id DESC";
+        $sql = "SELECT products.*, categories.category_name AS category_name 
+        FROM products 
+        JOIN categories ON products.category_id = categories.category_id 
+        ORDER BY products.product_id DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     public function delete($id) {
         $sql = "DELETE FROM products WHERE product_id = :id";

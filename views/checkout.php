@@ -13,6 +13,57 @@
             margin-top: 5px !important;
             display: block !important;
         }
+
+        /* Payment Option Container */
+        .payment-option {
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .payment-logo {
+            width: 50px;
+            height: auto;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Show the checkbox around the image when selected */
+        .payment-checkbox:checked+label .payment-logo {
+            border-color: #4CAF50;
+            /* Highlight border color when selected */
+            background-color: #f0f8f0;
+            /* Optional: add a light green background on selection */
+            transform: scale(1.05);
+            /* Slightly enlarge the image when selected */
+        }
+
+        .payment-option label {
+            display: inline-block;
+        }
+
+        .payment-option input[type="checkbox"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            /* Hide the actual checkbox */
+        }
+
+        /* Hover effects */
+        .payment-option:hover .payment-logo {
+            transform: scale(1.1);
+            /* Enlarge image when hovering */
+        }
+
+        #paymentImages {
+            margin-top: 20px;
+        }
     </style>
 
 </head>
@@ -42,7 +93,7 @@
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form action="?act=checkout" method="POST" onsubmit="return validateForm()">
+                <form action="?act=checkout" method="POST" id="checkoutForm" onsubmit="return validateForm()">
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <h6 class="checkout__title">Payment</h6>
@@ -123,28 +174,34 @@
 
                                 <!-- Phương thức thanh toán -->
                                 <div class="checkout__input__checkbox">
-                                    <label for="acc-or">
-                                        Create an account?
-                                        <input type="checkbox" id="acc-or">
+                                    <label for="paypal">
+                                        PayPal
+                                        <input type="checkbox" id="paypal" onchange="togglePaymentOptions()">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
 
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Check Payment
-                                        <input type="checkbox" id="payment">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                <div id="paymentImages" style="display: none;">
+                                    <div class="payment-option" onclick="selectPaymentOption(this, 'momo')">
+                                        <input type="checkbox" class="payment-checkbox" id="momo" hidden>
+                                        <label for="momo">
+                                            <img src="./assets/images/paypal/momopng.png" alt="Momo" class="payment-logo">
+                                        </label>
+                                    </div>
+                                    <div class="payment-option" onclick="selectPaymentOption(this, 'mbb')">
+                                        <input type="checkbox" class="payment-checkbox" id="mbb" hidden>
+                                        <label for="mbb">
+                                            <img src="./assets/images/paypal/bidv.png" alt="MBB" class="payment-logo">
+                                        </label>
+                                    </div>
+                                    <div class="payment-option" onclick="selectPaymentOption(this, 'nvpay')">
+                                        <input type="checkbox" class="payment-checkbox" id="nvpay" hidden>
+                                        <label for="nvpay">
+                                            <img src="./assets/images/paypal/vtbpng.png" alt="NVPay" class="payment-logo">
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Paypal
-                                        <input type="checkbox" id="paypal">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                                <button type="submit" name="payUrl" class="site-btn">PLACE ORDER</button>
                 </form>
             </div>
         </div>
@@ -156,15 +213,18 @@
     <!-- Checkout Section End -->
     <?php require_once 'footer.php' ?>
     <script>
+        // Hàm kiểm tra và thay đổi action của form trước khi submit
         function validateForm() {
-            var fullName = document.getElementById("full_name").value;
-            var address = document.getElementById("address").value;
-            var city = document.getElementById("city").value;
-            var phone = document.getElementById("phone").value;
-            var email = document.getElementById("email").value;
-            var note = document.getElementById("note").value;
-
-            var errorMessages = {};
+            const fullName = document.getElementById("full_name").value;
+            const address = document.getElementById("address").value;
+            const city = document.getElementById("city").value;
+            const phone = document.getElementById("phone").value;
+            const email = document.getElementById("email").value;
+            const note = document.getElementById("note").value;
+            const paypal = document.getElementById('paypal');
+            const form = document.getElementById('checkoutForm');
+            
+            var errorMessages = {}; // Error messages object
 
             if (fullName == "") {
                 errorMessages['full_name'] = "*Tên không được bỏ trống.";
@@ -199,12 +259,52 @@
                 }
             }
 
-            return isValid; // Nếu có lỗi, không gửi form
+            // Nếu form hợp lệ, thay đổi action của form nếu người dùng chọn PayPal
+            if (isValid) {
+                if (paypal.checked) {
+                    form.action = "?act=paypalMomo"; // Nếu chọn PayPal, chuyển hướng tới trang PayPal
+                } else {
+                    form.action = "?act=checkout"; // Nếu không chọn PayPal, giữ nguyên hành động
+                }
+                return true; // Gửi form nếu không có lỗi
+            }
+
+            return false; // Không gửi form nếu có lỗi
         }
 
         function validateEmail(email) {
             var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             return regex.test(email);
+        }
+
+        function togglePaymentOptions() {
+            const checkbox = document.getElementById('paypal');
+            const paymentImages = document.getElementById('paymentImages');
+
+            if (checkbox.checked) {
+                paymentImages.style.display = 'block';
+            } else {
+                paymentImages.style.display = 'none';
+                deselectAllOptions();
+            }
+        }
+
+        function deselectAllOptions() {
+            const allCheckboxes = document.querySelectorAll('.payment-checkbox');
+            allCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+
+        function selectPaymentOption(option, id) {
+            deselectAllOptions();
+
+            const checkbox = document.getElementById(id);
+            checkbox.checked = true;
+
+            const allOptions = document.querySelectorAll('.payment-option');
+            allOptions.forEach(option => option.classList.remove('selected'));
+            option.classList.add('selected');
         }
     </script>
 </body>

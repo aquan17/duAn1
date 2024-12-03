@@ -218,13 +218,6 @@ class homeController
         // Truyền dữ liệu giỏ hàng vào view thanh toán
         require_once 'views/checkout.php';
     }
-    
-// controllers/homeController.php
-
-// controllers/homeController.php
-
-// controllers/homeController.php
-
 public function placeOrder($full_name, $address, $city, $phone, $email, $note)
 {
     // Lấy dữ liệu sản phẩm trong giỏ hàng
@@ -340,7 +333,6 @@ public function productDetails($id)
     
     // Lấy các bình luận cho sản phẩm
     $comments = $this->homeModel->getProductComments($id);
-    
 
     // Nếu không có bình luận, khởi tạo thành mảng rỗng
     if (!$comments) {
@@ -378,10 +370,4 @@ public function productDetails($id)
     require_once 'views/shop-details.php';  // Load view chi tiết sản phẩm và bình luận
     require_once 'views/comment.php';
 }
-
-
-
-
-
-
 }

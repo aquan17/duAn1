@@ -55,17 +55,14 @@
                                 echo number_format($total) . 'đ'; ?>
                             </td>
                         </tr>
-                        <tr>
+                    <?php  } ?>
+                    <tr>
                             <th style="color: red; background-color: yellow;">Tổng Tiền: <?= number_format($_SESSION['sum_price']) . 'đ'   ?></th>
                         </tr>
-
-                    <?php  } ?>
                 </tbody>
             </table>
         </div>
         </div>
-
-
     </div>
     </div>
     <?php require_once './views/footer.php' ?>

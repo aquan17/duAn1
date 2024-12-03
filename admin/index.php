@@ -5,7 +5,6 @@ require_once "models/Category.php";
 require_once "models/Order.php";
 require_once "models/User.php";
 require_once "models/Comment.php";
-require_once "models/Statistics.php";
 
 require_once "controllers/UserController.php";
 require_once "controllers/ProductController.php";

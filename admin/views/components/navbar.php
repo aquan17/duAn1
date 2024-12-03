@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ADMIN</title>
     <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <!-- My CSS -->
@@ -37,9 +37,9 @@
                 </a>
             </li>
             <li>
-                <a href="index.php?ctl=user-list">
+                <a href="?ctl=user-list">
                     <i class='bx bxs-user'></i>
-                    <span class="text">Quản Lý Người Dùng</span>
+                    <span class="text">Quản Lý Khách Hàng</span>
                 </a>
             </li>
             <li>
@@ -49,17 +49,23 @@
                 </a>
             </li>
             <li>
-                <a href="">
+                <a href="?ctl=comment-list">
                     <i class='bx bxs-user'></i>
-                    <span class="text">Thống Kê</span>
+                    <span class="text">Quản Lý Bình Luận</span>
+                </a>
+            </li>
+            <li>
+                <a href="../?act=/">
+                    <p style="margin: 8px;">🧋</p>
+                    <span class="text">Shop</span>
                 </a>
             </li>
         </ul>
         <ul class="side-menu">
             <li>
-                <a href="index.php?ctl=comment-list">
+                <a href="#">
                     <i class='bx bxs-cog'></i>
-                    <span class="text">Comment</span>
+                    <span class="text">Settings</span>
                 </a>
             </li>
             <li>

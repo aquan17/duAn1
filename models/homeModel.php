@@ -249,7 +249,6 @@ public function addComment($product_id, $user_id,  $comment_text)
         return false;
     }
 }
-
 function getRelatedProducts($id) {
     $sql = "SELECT * FROM products WHERE product_id != $id LIMIT 2";  // Lấy 2 sản phẩm liên quan không bao gồm sản phẩm hiện tại
     return $this->conn->query($sql);

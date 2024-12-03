@@ -113,6 +113,7 @@
         <th>Giá</th>
         <th>Số lượng</th>
         <th>Danh mục</th>
+        <th>Phân Loại</th>
         <th>Hành động</th>
     </tr>
     <?php foreach ($products as $product): ?>
@@ -124,8 +125,21 @@
         <td><?= $product['description'] ?></td>
         <td><?= number_format($product['price']).'đ' ?></td>
         <td><?= $product['quantity'] ?></td>
-        <td><?= $product['category_id'] ?></td>
-        <td><?= $product['classify'] ?></td>
+        <td><?= $product['category_name'] ?></td>
+        <td>    
+    <?= 
+        $product['classify'] == 1 ? "Hot" : 
+        ($product['classify'] == 2 ? "Phổ Biến" : 
+        ($product['classify'] == 3 ? "Mới" : "Mới")) 
+    ?>
+
+     </td>
+        <div>
+   
+    
+    
+</div>
+
         
         <td>
             <a href="index.php?ctl=product-edit&id=<?= $product['product_id'] ?>"><button class="btn btn-warning">Sửa</button></a>
