@@ -12,17 +12,21 @@ class OrderController {
     // Hiển thị danh sách đơn hàng
     public function listOrders() {
         $orders = $this->orderModel->listOrders();
-        require_once 'views/order/listorder.php';  // Gọi view để hiển thị đơn hàng
+        require_once 'views/order/listorder.php'; 
+        // Gọi view để hiển thị đơn hàng
     }
 
     // Hiển thị chi tiết đơn hàng
     public function viewOrderDetails() {
-        if (isset($_GET['order_id'])) {
+        if (isset($_GET['order_id']) && is_numeric($_GET['order_id'])) {
             $orderId = $_GET['order_id'];
-            $orderDetails = $this->orderModel->getOrderDetails($orderId);
-            require_once 'views/order/viewsorder.php';  // Gọi view chi tiết đơn hàng
+            $orderDetails = $this->orderModel->getOrderWithDetails($orderId);
+           
+                require_once 'views/order/viewsorder.php';  // Gọi view chi tiết đơn hàng
+            
         } else {
-            echo "Không tìm thấy mã đơn hàng.";
+            // Xử lý nếu không có mã đơn hàng trong URL hoặc mã đơn hàng không hợp lệ
+             // Gọi view lỗi
         }
     }
 
@@ -33,8 +37,11 @@ class OrderController {
             $status = $_POST['status'];
             $this->orderModel->updateOrderStatus($orderId, $status);
             header("Location: index.php?ctl=order");  // Chuyển hướng lại trang danh sách đơn hàng
+            exit;
+        } else {
+            // Xử lý nếu dữ liệu không hợp lệ
+            // Gọi view lỗi
         }
     }
 }
-
 ?>

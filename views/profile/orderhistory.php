@@ -49,7 +49,22 @@
                             <td><img src="./assets/images/product/<?= $history['image'] ?>" alt="" width="100px"></td>
                             <td><?= $history['quantity'] ?></td>
                             <td><?= $history['order_date'] ?></td>
-                            <td><?= ($history['status'] == 1) ? 'Đang xử lý' : ($history['status'] == 2 ? 'Đã xác nhận' : 'Chưa xác nhận'); ?></td>
+                            <td><?= $history['status'] == 1
+        ? '<span class="badge badge-success">Đã xử lý</span>'
+        : ($history['status'] == 2
+            ? '<span class="badge badge-warning text-dark">Đang xử lý</span>'
+            : ($history['status'] == 3
+                ? '<span class="badge badge-secondary">Chưa xử lý</span>'
+                : ($history['status'] == 4
+                    ? '<span class="badge badge-primary">Đã giao</span>'
+                    : ($history['status'] == 5
+                        ? '<span class="badge badge-info">Đang giao</span>'
+                        : '<span class="badge badge-danger">Hủy đơn</span>'
+                    )
+                )
+            )
+        );
+    ?></td>
                             <td><?php $total = $history['price'] * $history['quantity'];
                                 $_SESSION['sum_price'] += $total;
                                 echo number_format($total) . 'đ'; ?>

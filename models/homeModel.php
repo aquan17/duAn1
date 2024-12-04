@@ -147,21 +147,35 @@ public function generateOrderCode() {
     }
     return false; // Không có thay đổi
 }
-public function odhistory() {
-    $sql = "SELECT products.title, products.image, order_details.quantity, order_details.price, orders.status, orders.order_date
-    FROM products
-    INNER JOIN order_details ON products.product_id = order_details.product_id
-    INNER JOIN orders ON orders.order_id = order_details.order_id";
-
+public function odhistory($email) {
+    $sql = "SELECT 
+                products.title, 
+                products.image, 
+                order_details.quantity, 
+                order_details.price, 
+                orders.status, 
+                orders.order_date
+            FROM 
+                products
+            INNER JOIN 
+                order_details 
+                ON products.product_id = order_details.product_id
+            INNER JOIN 
+                orders 
+                ON orders.order_id = order_details.order_id
+            WHERE 
+                orders.email = :email
+            ORDER BY 
+                orders.order_date DESC";
 
     $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR); // Gắn email làm tham số
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Debug: Kiểm tra dữ liệu trả về
-    // var_dump($result);
     return $result;
 }
+
 function deleteSpcart($id)
 {
     // Kiểm tra nếu sản phẩm tồn tại trong giỏ hàng

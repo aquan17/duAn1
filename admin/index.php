@@ -5,9 +5,7 @@ require_once "models/Category.php";
 require_once "models/Order.php";
 require_once "models/User.php";
 require_once "models/Comment.php";
-require_once "models/thongke.php";
 
-// require_once "controllers/thongkeController.php";
 require_once "controllers/UserController.php";
 require_once "controllers/ProductController.php";
 require_once "controllers/OrderController.php";
@@ -41,10 +39,9 @@ match("$ctl") {
     "user-store" => (new UserController())->store(),
     "user-edit" => (new UserController())->edit(),
     "user-delete" => (new UserController())->delete(),
-
     "comment-list" => (new CommentController())->list(),
     "comment-show" =>(new CommentController())->showComment(),
     "comment-hide" =>(new CommentController())->hideComment(),
-    
+
     default => view('404'),
 };

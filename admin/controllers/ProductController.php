@@ -28,10 +28,10 @@ class ProductController {
         $data = $_POST;
         $image = "";
         if ($_FILES['image']['size'] > 0) {
-            $image = "images/" . $_FILES['image']['name'];
+            $image = "../assets/images/product/" . $_FILES['image']['name'];
             move_uploaded_file($_FILES['image']['tmp_name'], $image);
         }
-        $data['image'] = $image;
+        $data['image'] =  $_FILES['image']['name'];
         (new Product())->insert($data);
         header("Location: index.php?ctl=product-list");
         die;
@@ -40,42 +40,44 @@ class ProductController {
     public function edit() {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $data = $_POST;
-    
+        
             // Kiểm tra xem người dùng có tải ảnh lên không
             if ($_FILES['image']['size'] > 0) {
-                $image = "images/" . $_FILES['image']['name'];
-                $data['image'] = $image;  // Cập nhật ảnh mới
+                // Đường dẫn lưu ảnh mới
+                $image = "../assets/images/product/" . $_FILES['image']['name'];
                 move_uploaded_file($_FILES['image']['tmp_name'], $image);
+                $data['image'] = $_FILES['image']['name'];  // Cập nhật ảnh mới vào dữ liệu
             } else {
                 // Nếu không tải ảnh lên, giữ lại ảnh cũ
                 $data['image'] = $data['old_image'];  // Giữ lại ảnh cũ
             }
-    
-            // Loại bỏ old_image khỏi mảng $data trước khi truyền vào phương thức update
+        
+            // Loại bỏ tham số old_image khỏi mảng $data
             unset($data['old_image']);  // Loại bỏ tham số old_image
     
             // Thêm tham số 'id' vào mảng $data để đảm bảo 'WHERE' có giá trị 'product_id'
             $data['id'] = $_GET['id'];  // Lấy ID từ URL và thêm vào mảng $data
-    
+        
             // Cập nhật sản phẩm
             (new Product())->update($data);
-    
+        
             // Chuyển hướng về danh sách sản phẩm
             header("Location: index.php?ctl=product-list");
             die;
         }
-        
+    
         // Lấy ID sản phẩm từ URL
         $id = $_GET['id'];
-        
+    
         // Lấy danh sách danh mục và thông tin sản phẩm
         $categories = (new Category())->all();
         $product = (new Product())->find_one($id);
-        
+    
         // Truyền dữ liệu vào view
         view('product/edit', [
             'product' => $product,
             'categories' => $categories
         ]);
     }
+    
 }

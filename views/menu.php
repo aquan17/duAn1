@@ -61,7 +61,7 @@
                         <!-- Hiển thị khi người dùng đã đăng nhập -->
                         <div class="user-menu">
                             <img src="./assets/images/icon/user1.png" alt="User Icon">
-                            <span class="dropdown-text">Xin chào, <?= htmlspecialchars($_SESSION['user']) ?>!</span>
+                            <span class="dropdown-text">Hello, <?= htmlspecialchars($_SESSION['user']) ?>!</span>
                             <ul class="dropdown-text">
                                 <li><a href="?act=profile">Thông tin cá nhân</a></li>
                                 <li><a href="?act=Cart">Đơn hàng của tôi</a></li>
@@ -69,7 +69,7 @@
                             </ul>
 
                         </div>
-                        <p style="color: crimson;">Xin Chào, <?= $_SESSION['user']  ?>!</p>
+                        <p style="color: crimson;">Hello, <?= $_SESSION['user']  ?>!</p>
                     <?php else: ?>
                         <!-- Hiển thị nút Đăng nhập khi chưa đăng nhập -->
                         <a href="?act=login" id="loginBtn">

@@ -290,20 +290,25 @@ public function updateProfile($id)
     // Nếu không phải POST, thì chỉ hiển thị thông tin người dùng
     $this->renderinfo($id);
 }
-public function odhistory(){
-    if ($this->homeModel) {
-        $odhistory = $this->homeModel->odhistory();  // Gọi phương thức listOrder từ OrderModel
+public function odhistory() {
+    // Kiểm tra xem email có tồn tại trong session không
+    $email = $_SESSION['email'] ?? null;
+
+    if ($email) {
+        // Gọi phương thức từ model
+        $odhistory = $this->homeModel->odhistory($email);
 
         if ($odhistory) {
             // Truyền dữ liệu đơn hàng vào view
             require_once 'views/profile/orderhistory.php';
         } else {
-            echo "No orders found.";
+            echo "No orders found for this user.";
         }
     } else {
-        echo "Error: Order model is not initialized.";
+        echo "Error: User email not found. Please log in.";
     }
 }
+
 function deleteProduct($id)
 {
     // Kiểm tra nếu sản phẩm tồn tại trong giỏ hàng
