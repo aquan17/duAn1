@@ -154,7 +154,8 @@ public function odhistory($email) {
                 order_details.quantity, 
                 order_details.price, 
                 orders.status, 
-                orders.order_date
+                orders.order_date,
+                orders.order_id
             FROM 
                 products
             INNER JOIN 
@@ -169,12 +170,28 @@ public function odhistory($email) {
                 orders.order_date DESC";
 
     $stmt = $this->conn->prepare($sql);
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR); // Gắn email làm tham số
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return $result;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+public function getOrderById($order_id) {
+    $sql = "SELECT * FROM orders WHERE order_id = :order_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+public function cancelOrder($order_id) {
+    // Cập nhật trạng thái đơn hàng thành "Đã hủy" (status = 3) chỉ khi trạng thái là "Chưa xử lý"
+    $sql = "UPDATE orders SET status = 3 WHERE order_id = :order_id AND status NOT IN (1, 2, 4, 5)";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+
 
 function deleteSpcart($id)
 {
