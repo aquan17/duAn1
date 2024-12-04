@@ -1,23 +1,24 @@
 <?php
-// Controller: AdminController.php
-require_once "models/thongke.php";
-require_once '../carbon/autoload.php'; // Nếu sử dụng Composer để cài đặt Carbon
-use Carbon\Carbon;
+require_once 'models/dashboard.php';
 
 class dashboardController
 {
+    private $dashboard;
+
+    public function __construct()
+    {
+        $this->dashboard = new dashboard(); // Khởi tạo model dashboard
+    }
+
     public function dashboard()
     {
-        // Lấy ngày bắt đầu và kết thúc từ GET (nếu có)
-        $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : Carbon::now('Asia/Ho_Chi_Minh')->subDays(7)->toDateString(); // mặc định 7 ngày trước
-        $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : Carbon::now('Asia/Ho_Chi_Minh')->toDateString(); // mặc định hôm nay
+        // Lấy danh sách đơn hàng từ model
+        $get = $this->dashboard->getOrders();
+// var_dump($get);  // In ra dữ liệu để kiểm tra
+require_once 'views/dashboard.php';
 
-        // Gọi model để lấy dữ liệu thống kê
-        $statisticsModel = new StatisticsModel();
-        $statistics = $statisticsModel->getStatisticsData($start_date, $end_date);
 
-        // Truyền dữ liệu sang view
-        require_once 'views/dashboard.php';
+        // Gọi view dashboard và truyền dữ liệu
+        require_once 'views/dashboard.php'; // Make sure 'dashboard.php' handles `$orders` properly
     }
 }
-?>

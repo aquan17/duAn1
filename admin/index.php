@@ -6,6 +6,7 @@ require_once "models/Order.php";
 require_once "models/User.php";
 require_once "models/Comment.php";
 
+require_once "controllers/thongkeController.php";
 require_once "controllers/UserController.php";
 require_once "controllers/ProductController.php";
 require_once "controllers/OrderController.php";
@@ -19,6 +20,10 @@ $ctl = $_GET['ctl'] ?? "";
 
 match("$ctl") {
     ""=> (new dashboardController)->dashboard(),
+
+    
+    "thongke" => (new thongkeController())->thongke(),
+
     "product-list" => (new ProductController())->list(),
     "product-add" => (new ProductController())->add(),
     "product-store" => (new ProductController())->store(),

@@ -44,19 +44,25 @@
             </li>
             <li>
                 <a href="?ctl=order">
-                    <i class='bx bxs-user'></i>
+                <i class='bx bx-cart'></i>
                     <span class="text">Quản Lý Đơn Hàng</span>
                 </a>
             </li>
             <li>
                 <a href="?ctl=comment-list">
-                    <i class='bx bxs-user'></i>
+                <i class='bx bx-message-dots' ></i>
                     <span class="text">Quản Lý Bình Luận</span>
                 </a>
             </li>
             <li>
+                <a href="?ctl=thongke">
+                <i class='bx bx-trending-up'></i>
+                    <span class="text">Thống Kê</span>
+                </a>
+            </li>
+            <li>
                 <a href="../?act=/">
-                    <p style="margin: 8px;">🧋</p>
+                <i class='bx bxs-t-shirt' ></i>
                     <span class="text">Shop</span>
                 </a>
             </li>

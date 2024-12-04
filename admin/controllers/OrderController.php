@@ -13,8 +13,10 @@ class OrderController {
     public function listOrders() {
         $orders = $this->orderModel->listOrders();
         require_once 'views/order/listorder.php'; 
+        // require_once 'dashboard.php'; 
         // Gọi view để hiển thị đơn hàng
     }
+    
 
     // Hiển thị chi tiết đơn hàng
     public function viewOrderDetails() {

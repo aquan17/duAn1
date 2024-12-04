@@ -53,7 +53,7 @@ if (isset($_SESSION['message'])) {
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Mã Đơn Hàng</th>
+                            <th>STT</th>
                             <th>Tên Sản Phẩm</th>
                             <th>Hình Ảnh</th>
                             <th>Số Lượng</th>
