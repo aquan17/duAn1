@@ -119,7 +119,7 @@ if ($resultCode == 0) {
     <div class="container">
         <div class="header">
             <h1>Thanh Toán Thành Công!</h1>
-            <p>Cảm ơn bạn đã mua hàng tại <strong>[Tên cửa hàng]</strong>!</p>
+            <p>Cảm ơn bạn đã mua hàng tại <strong>[WEBSITE BÁN QUẦN ÁO NAM MENSTYLE]</strong>!</p>
         </div>
 
         <div class="notification <?php echo $colorClass; ?>">
@@ -142,7 +142,8 @@ if ($resultCode == 0) {
 
         <div class="footer">
             <p>Chúc bạn một ngày tuyệt vời!</p>
-            <p><strong>[Tên cửa hàng]</strong></p>
+            <p><strong>[WEBSITE BÁN QUẦN ÁO NAM MENSTYLE]</strong></p>
+            <a href="?act=shop"><button class="btn btn-success">Continue Shopping</button></a>
         </div>
     </div>
 </body>

@@ -1,8 +1,7 @@
 <?php
 session_start();
-// session_destroy();
 
-// csdl 
+// csdl
 require_once 'commons/function.php';
 // models
 require_once 'models/homeModel.php';
@@ -15,6 +14,7 @@ require_once 'controllers/momoController.php';
 
 // Lấy id và act từ URL
 $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
+$order_id = isset($_GET['order_id']) ? (int)$_GET['order_id'] : null; // Lấy order_id cho cancelOrder
 $act = $_GET['act'] ?? '/';
 
 // Kiểm tra act và gọi đúng controller method
@@ -74,6 +74,13 @@ switch ($act) {
         break;
     case "history":
         (new homeController())->odhistory();
+        break;
+    case "cancelOrder":
+        if ($order_id) {
+            (new homeController())->cancelOrder($order_id);  // Truyền đúng order_id
+        } else {
+            echo 'Order ID is missing.';
+        }
         break;
     case "comments":
         (new homeController())->productDetails($id);

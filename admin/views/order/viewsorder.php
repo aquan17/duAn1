@@ -100,7 +100,7 @@ foreach ($orderDetails as $item) {
 
     <div class="content">
         <h2 class="mb-4">Chi tiết đơn hàng</h2>
-        
+        <div style="margin-left: 10px;">
        <?php if (!empty($orderDetails)): ?>
     <p><strong>Tên khách hàng:</strong> <?= $orderDetails[0]['full_name'] ?></p>
     <p><strong>Địa chỉ:</strong> <?= $orderDetails[0]['address'] ?></p>
@@ -110,7 +110,7 @@ foreach ($orderDetails as $item) {
 <?php else: ?>
     <p>Không có dữ liệu đơn hàng.</p>
 <?php endif; ?>
-
+</div>
 
         <table class="table table-bordered table-striped">
             <thead>
@@ -125,7 +125,7 @@ foreach ($orderDetails as $item) {
             <tbody>
                 <?php foreach ($orderDetails as $item): ?>
                     <tr>
-                        <td><?= $item['order_id'] ?></td>
+                        <td><?= $item['order_code'] ?></td>
                         <td><?= $item['product_name'] ?></td>
                         <td><?= $item['quantity'] ?></td>
                         <td><?= number_format($item['price'], 0, ',', '.') ?> VND</td>

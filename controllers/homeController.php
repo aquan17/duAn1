@@ -290,20 +290,51 @@ public function updateProfile($id)
     // Nếu không phải POST, thì chỉ hiển thị thông tin người dùng
     $this->renderinfo($id);
 }
-public function odhistory(){
-    if ($this->homeModel) {
-        $odhistory = $this->homeModel->odhistory();  // Gọi phương thức listOrder từ OrderModel
+public function odhistory() {
+    // Kiểm tra xem email có tồn tại trong session không
+    $email = $_SESSION['email'] ?? null;
+
+    if ($email) {
+        // Gọi phương thức từ model
+        $odhistory = $this->homeModel->odhistory($email);
 
         if ($odhistory) {
             // Truyền dữ liệu đơn hàng vào view
             require_once 'views/profile/orderhistory.php';
         } else {
-            echo "No orders found.";
+            echo "No orders found for this user.";
         }
     } else {
-        echo "Error: Order model is not initialized.";
+        echo "Error: User email not found. Please log in.";
     }
 }
+
+public function cancelOrder($order_id)
+{
+    // Lấy thông tin đơn hàng
+    $order = $this->homeModel->getOrderById($order_id);
+    
+    // Kiểm tra trạng thái của đơn hàng, chỉ cho phép hủy nếu trạng thái là chưa xử lý (status != 1, 2, 4, 5)
+    if ($order && !in_array($order['status'], [1, 2, 4, 5])) {
+        // Cập nhật trạng thái đơn hàng thành "Đã hủy" (status = 3)
+        $result = $this->homeModel->cancelOrder($order_id);
+        if ($result) {
+            $_SESSION['message'] = "Đơn hàng đã được hủy thành công.";
+            // Sau khi hủy, giảm tổng tiền nếu cần
+            $_SESSION['sum_price'] -= $order['price'] * $order['quantity']; 
+        } else {
+            $_SESSION['message'] = "Không thể hủy đơn hàng. Vui lòng thử lại.";
+        }
+    } else {
+        $_SESSION['message'] = "Đơn hàng không thể hủy vì đã được xử lý hoặc không tồn tại.";
+    }
+
+    // Sau khi hủy xong, chuyển hướng về trang lịch sử đơn hàng
+    header("Location: ?act=history");
+    exit;
+}
+
+
 function deleteProduct($id)
 {
     // Kiểm tra nếu sản phẩm tồn tại trong giỏ hàng

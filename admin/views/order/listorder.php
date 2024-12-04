@@ -145,12 +145,12 @@
         : ($order['status'] == 2
             ? '<span class="badge badge-warning text-dark">Đang xử lý</span>'
             : ($order['status'] == 3
-                ? '<span class="badge badge-secondary">Chưa xử lý</span>'
+                ? '<span class="badge badge-danger">Hủy đơn</span>'
                 : ($order['status'] == 4
                     ? '<span class="badge badge-primary">Đã giao</span>'
                     : ($order['status'] == 5
                         ? '<span class="badge badge-info">Đang giao</span>'
-                        : '<span class="badge badge-danger">Hủy đơn</span>'
+                        : '<span class="badge badge-secondary">Chưa xử lý</span>'
                     )
                 )
             )
@@ -168,10 +168,10 @@
         <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
             <option value="1" <?= $order['status'] == 1 ? 'selected' : ''; ?>>Đã xử lý</option>
             <option value="2" <?= $order['status'] == 2 ? 'selected' : ''; ?>>Đang xử lý</option>
-            <option value="3" <?= $order['status'] == 3 ? 'selected' : ''; ?>>Chưa xử lý</option>
+            <option value="3" <?= $order['status'] == 3 ? 'selected' : ''; ?>>Hủy đơn</option>
             <option value="4" <?= $order['status'] == 4 ? 'selected' : ''; ?>>Đã giao</option>
             <option value="5" <?= $order['status'] == 5 ? 'selected' : ''; ?>>Đang giao</option>
-            <option value="6" <?= $order['status'] == 6 ? 'selected' : ''; ?>>Hủy đơn</option>
+            <option value="6" <?= $order['status'] == 6 ? 'selected' : ''; ?>>Chưa xử lý</option>
         </select>
     </form>
 </td>
