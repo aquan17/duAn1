@@ -7,7 +7,7 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <title>Shop</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -22,44 +22,9 @@
     <link rel="stylesheet" href="./assets/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="./assets/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
+    <link rel="stylesheet" href="./assets/css/noti.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        .noti-success {
-            position: absolute;
-            top: 250px;
-            /* Điều chỉnh vị trí dọc theo yêu cầu */
-            left: 15%;
-            transform: translateX(-50%);
-            padding: 15px 25px;
-            background-color: #4CAF50;
-            /* Màu nền xanh lá cây cho thông báo */
-            color: white;
-            border-radius: 8px;
-            font-size: 16px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            animation: fadeInOut 3s forwards;
-            z-index: 1000;
-        }
 
-        @keyframes fadeInOut {
-            0% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            20%,
-            80% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-        }
-    </style>
 
 <body>
     <?php
@@ -288,8 +253,8 @@
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
                                         <div class="product__item__pic set-bg" data-setbg="./assets/images/product/<?= $shop['image'] ?>">
-                                            <a href="?act=details&id=<?= $shop['product_id'] ?>">
-                                                <img src="./assets/images/product/<?= $shop['image'] ?>" alt="Product Image" >
+                                            <a href="?act=comments&id=<?= $shop['product_id'] ?>">
+                                                <img src="./assets/images/product/<?= $shop['image'] ?>" alt="Product Image">
                                             </a>
                                             <ul class="product__hover">
                                                 <li><a href="#"><img src="./assets/images/icon/heart.png" alt=""></a></li>
@@ -297,15 +262,18 @@
                                                 <li><a href="#"><img src="./assets/images/icon/search.png" alt=""></a></li>
                                             </ul>
                                         </div>
-
                                         <div class="product__item__text">
                                             <h6><?= $shop['title'] ?></h6>
-                                            <!-- Form to Add to Cart -->
-                                            <form method="post" action="?act=spCart&id=<?= $shop['product_id'] ?>">
-                                                <input type="hidden" name="product_id" value="<?= $shop['product_id'] ?>" />
-                                                <a href="" class="add-cart"> <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button></a>
-                                                <!-- <button name="btn_add"> <a href="?act=spCart" class="add-cart">+ Add To Cart</a></button> -->
-                                            </form>
+                                            <?php if (isset($_SESSION['user'])): ?>
+                                                <form method="post" action="?act=spCart&id=<?= $shop['product_id'] ?>">
+                                                    <input type="hidden" name="product_id" value="<?= $shop['product_id'] ?>" />
+                                                    <a href="" class="add-cart">
+                                                        <button type="submit" name="btn_add" style="border: none;">+ Add To Cart</button>
+                                                    </a>
+                                                </form>
+                                            <?php else: ?>
+                                                <a href="?act=login" id="loginBtn" class="add-cart"><button style="border: none;">+ Please Log In to Add To Cart</button></a>
+                                            <?php endif; ?>
                                             <div class="rating">
                                                 <i class="fa fa-star-o"></i>
                                                 <i class="fa fa-star-o"></i>
@@ -314,11 +282,6 @@
                                                 <i class="fa fa-star-o"></i>
                                             </div>
                                             <h5><?= number_format($shop['price']) . 'đ' ?></h5>
-                                            <div class="product__color__select">
-                                                <label for="pc-4"><input type="radio" id="pc-4"></label>
-                                                <label class="active black" for="pc-5"><input type="radio" id="pc-5"></label>
-                                                <label class="grey" for="pc-6"><input type="radio" id="pc-6"></label>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -328,18 +291,17 @@
                         <?php endif; ?>
                     </div>
 
-                    <!-- End Product -->
+                    <!-- Phân trang -->
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="product__pagination">
-                                <a class="active" href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <span>...</span>
-                                <a href="#">21</a>
+                                <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                    <a class="<?= $page == $currentPage ? 'active' : '' ?>" href="?act=shop&page=<?= $page ?>"><?= $page ?></a>
+                                <?php endfor; ?>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -351,17 +313,8 @@
     require_once 'footer.php'
     ?>
 
-    <!-- Js Plugins -->
-    <script src="./assets/js/jquery-3.3.1.min.js"></script>
-    <script src="./assets/js/bootstrap.min.js"></script>
-    <script src="./assets/js/jquery.nice-select.min.js"></script>
-    <script src="./assets/js/jquery.nicescroll.min.js"></script>
-    <script src="./assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="./assets/js/jquery.countdown.min.js"></script>
-    <script src="./assets/js/jquery.slicknav.js"></script>
-    <script src="./assets/js/mixitup.min.js"></script>
-    <script src="./assets/js/owl.carousel.min.js"></script>
-    <script src="./assets/js/main.js"></script>
+
+
 </body>
 
 </html>

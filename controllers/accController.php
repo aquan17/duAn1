@@ -1,0 +1,100 @@
+<?php
+// session_start(); // Đảm bảo rằng phiên làm việc được bắt đầu đầu file
+
+class accController
+{
+    public $accModel;
+
+    function __construct()
+    {
+        $this->accModel = new accModel();
+    }
+    
+    function login()
+    {
+        if (isset($_POST['btn_login'])) { // Kiểm tra xem nút đăng nhập đã được chọn chưa
+            $user = $_POST['name'];  // Changed from 'user' to 'name' based on your HTML input
+            $pass = $_POST['password'];  // Changed from 'pass' to 'password'
+
+            if ($this->accModel->checkAcc($user, $pass)) { // Kiểm tra thông tin đăng nhập
+                $_SESSION['user'] = $user;
+                echo "<script>alert('Đăng nhập thành công!');</script>";
+                header("Location: ?act=/");
+                exit();
+            } else {
+                echo "<script>alert('Không đăng nhập thành công!');</script>";
+            }
+        }
+        require_once 'views/login.php'; // Gọi giao diện đăng nhập
+    }
+
+    function logout()
+    {
+        session_destroy(); // Xóa toàn bộ phiên làm việc
+        header("Location: ?act=/");
+        exit();
+    }
+
+    function insertUser()
+    {
+        if (isset($_POST['btn_add'])) {
+            $name = $_POST['user'];  // Changed from 'name' to 'user' based on your HTML input
+            $password = $_POST['pass'];  // Changed from 'password' to 'pass'
+            $email = $_POST['email'];
+            $phone = $_POST['phone'];
+            $dchi = $_POST['address'];
+
+            // Kiểm tra các giá trị đầu vào
+            if (empty($name) || empty($password) || empty($email) || empty($phone) || empty($dchi)) {
+                echo "Vui lòng điền đầy đủ thông tin.";
+                return;
+            }
+
+            if ($this->accModel->insertUser($name, $password, $email, $phone, $dchi)) {
+                echo "<script>alert('Tạo tài khoản thành công');</script>";
+                echo "<script>window.location.href = '?act=/';</script>";
+                exit(); // Stop further script execution
+            } else {
+                echo "Lỗi khi tạo mới user vào cơ sở dữ liệu.";
+            }
+        }
+        require_once 'views/login.php'; // Đảm bảo luôn gọi form login sau khi xử lý
+    }
+
+    function handleAuth()
+    {
+        $actionType = $_POST['actionType'] ?? 'login';
+
+        if ($actionType === 'btn_login') {
+            $this->login();
+        } elseif ($actionType === 'btn_add') {
+            $this->insertUser();
+        } elseif ($actionType === 'forgot') {
+            $this->forgotPassword($_POST);
+        } else {
+            echo "Hành động không hợp lệ!";
+        }
+    }
+
+    function forgotPassword($data)
+    {
+        $email = $data['email'];
+
+        if (empty($email)) {
+            echo "Vui lòng nhập email khôi phục.";
+            return;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "Email không hợp lệ.";
+            return;
+        }
+
+        // Thêm logic gửi email hoặc cập nhật mật khẩu tại đây
+        echo "Hướng dẫn khôi phục mật khẩu đã được gửi đến email của bạn.";
+    }
+}
+
+
+
+?>

@@ -4,213 +4,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popup Đăng Nhập</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Trang Đăng Nhập Hiện Đại | AsmrProg</title>
+    <style>
+        /* CSS không thay đổi */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: #c9d6ff;
+            background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+        }
+
+        .container p {
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0.3px;
+            margin: 20px 0;
+        }
+
+        .container span {
+            font-size: 12px;
+        }
+
+        .container a {
+            color: #333;
+            font-size: 13px;
+            text-decoration: none;
+            margin: 15px 0 10px;
+        }
+
+        .container button {
+            background-color: #512da8;
+            color: #fff;
+            font-size: 12px;
+            padding: 10px 45px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .container button.hidden {
+            background-color: transparent;
+            border-color: #fff;
+        }
+
+        .container form {
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            height: 100%;
+        }
+
+        .container input {
+            background-color: #eee;
+            border: none;
+            margin: 8px 0;
+            padding: 10px 15px;
+            font-size: 13px;
+            border-radius: 8px;
+            width: 100%;
+            outline: none;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-in {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        .container.active .sign-in {
+            transform: translateX(100%);
+        }
+
+        .sign-up {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.active .sign-up {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: move 0.6s;
+        }
+
+        @keyframes move {
+            0%, 49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+            50%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        .social-icons {
+            margin: 20px 0;
+        }
+
+        .social-icons a {
+            border: 1px solid #ccc;
+            border-radius: 20%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 3px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .toggle-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: all 0.6s ease-in-out;
+            border-radius: 150px 0 0 100px;
+            z-index: 1000;
+        }
+
+        .container.active .toggle-container {
+            transform: translateX(-100%);
+            border-radius: 0 150px 100px 0;
+        }
+
+        .toggle {
+            background-color: #512da8;
+            height: 100%;
+            background: linear-gradient(to right, #5c6bc0, #512da8);
+            color: #fff;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: all 0.6s ease-in-out;
+        }
+
+        .container.active .toggle {
+            transform: translateX(50%);
+        }
+
+        .toggle-panel {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 30px;
+            text-align: center;
+            top: 0;
+            transform: translateX(0);
+            transition: all 0.6s ease-in-out;
+        }
+
+        .toggle-left {
+            transform: translateX(-200%);
+        }
+
+        .container.active .toggle-left {
+            transform: translateX(0);
+        }
+
+        .toggle-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .container.active .toggle-right {
+            transform: translateX(200%);
+        }
+    </style>
 </head>
-<style>
-    /* Mặc định popup ẩn */
-    /* CSS cho popup đăng nhập */
-.popup {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.login-popup .popup-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 500px;
-    text-align: center;
-}
-
-.login-popup .close-btn {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.login-popup .close-btn:hover,
-.login-popup .close-btn:focus {
-    color: black;
-    text-decoration: none;
-}
-
-.login-popup form {
-    display: flex;
-    flex-direction: column;
-    padding: 50px 30px;
-    border-radius: 15px;
-    gap: 20px;
-}
-
-.login-popup .label_wrap>label {
-    margin-right: 10px;
-}
-
-.login-popup .label_wrap>label:last-child,
-.login-popup input[type="radio"],
-.login-popup #forgot {
-    display: none;
-}
-
-.login-popup input {
-    border: none;
-    min-width: 350px;
-    color: white;
-    padding: 10px;
-    background-color: #333333;
-    outline: none;
-    border-radius: 5px;
-}
-
-.login-popup form>div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-bottom: 1px solid #333333;
-}
-
-.login-popup form>div>a {
-    font-size: 12px;
-    color: #ccc;
-    margin-top: -10px;
-    margin-bottom: 15px;
-    align-self: flex-end;
-}
-
-.login-popup form > div > a:last-child {
-    padding: 0 5px;
-    width: max-content;
-    margin: auto;
-    display: inline-block;
-    text-align: center;
-    transform: translateY(50%);
-    color: #ffb800;
-    background: #121212;
-}
-
-.login-popup form button {
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    background: #ffb800;
-}
-
-.login-popup form button,
-.login-popup .label_wrap>label,
-.login-popup .form_btns a label {
-    transition: 0.3s ease;
-    cursor: pointer !important;
-}
-
-.login-popup form button:hover,
-.login-popup .label_wrap>label:hover,
-.login-popup .form_btns a label:hover {
-    filter: brightness(1.2);
-}
-
-.login-popup #login_swich:checked~.label_wrap>label:nth-child(1),
-.login-popup #signup_swich:checked~.label_wrap>label:nth-child(2),
-.login-popup #forgot_swich:checked~.label_wrap>label:nth-child(3) {
-    color: #ffb800;
-    font-weight: bold;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #ffb800;
-    display: inline-block;
-}
-
-.login-popup #forgot_swich:checked~.label_wrap>label:not(:nth-child(3)) {
-    display: none;
-}
-
-.login-popup #login_swich:checked~div:not(:nth-of-type(1)),
-.login-popup #login_swich:checked~#confirm {
-    display: none;
-}
-
-.login-popup #signup_swich:checked~div:not(:nth-of-type(2)) {
-    display: none;
-}
-
-.login-popup #forgot_swich:checked~div:not(:nth-of-type(3)),
-.login-popup #forgot_swich:checked~input:not(:last-of-type) {
-    display: none;
-}
-
-.login-popup #forgot_swich:checked~#forgot {
-    display: inline;
-}
-
-</style>
 
 <body>
 
-    <!-- Popup Đăng Nhập -->
-    <div id="loginPopup" class="popup login-popup">
-    <div class="popup-content">
-        <span id="closeBtn" class="close-btn">&times;</span>
-        <h2>Đăng Nhập</h2>
-        <form method="post">
-            <input type="radio" id="login_swich" name="swich" checked />
-            <input type="radio" id="signup_swich" name="swich" />
-            <input type="radio" id="forgot_swich" name="swich" />
-            <span class="label_wrap">
-                <label for="login_swich">Log in</label>
-                <label for="signup_swich">Sign up</label>
-                <label for="forgot_swich">Forgot Password</label>
-            </span>
-            <input placeholder="Username" name="user" />
-            <input placeholder="Password" type="password" name="pass" />
-            <input placeholder="Confirm password" type="password" id="confirm" />
-            <input placeholder="Recovery email" type="password" id="forgot" />
-            <div class="form_btns">
-                <a><label for="forgot_swich">Forgot password?</label></a>
-                <button id="login_btn">Log in</button>
-                <a><label for="signup_swich">Create account</label></a>
-            </div>
-            <div class="form_btns">
-                <button id="signup_btn">Sign up</button>
-                <a><label for="login_swich">Login</label></a>
-            </div>
-            <div class="form_btns">
-                <button id="forgot_btn">Reset Password</button>
-            </div>
-        </form>
-    </div>
-</div>
+    <div class="container" id="container">
+        <!-- Form đăng ký -->
+        <div class="form-container sign-up">
+            <form action="?act=auth" method="POST">
+                <input type="hidden" name="actionType" value="btn_add">
+                <h1>Tạo Tài Khoản</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>hoặc sử dụng email để đăng ký</span>
+                <input type="text" placeholder="Tên" name="user" required>
+                <input type="password" placeholder="Mật khẩu" name="pass" required>
+                <input type="email" placeholder="Email" name="email" required>
+                <input type="text" placeholder="Số Điện Thoại" name="phone" required>
+                <input type="text" placeholder="Địa Chỉ" name="address" required>
+                <button type="submit" name="btn_add">Đăng Ký</button>
+            </form>
+        </div>
 
+        <!-- Form đăng nhập -->
+        <div class="form-container sign-in">
+            <form action="?act=auth" method="POST">
+                <input type="hidden" name="actionType" value="btn_login">
+                <h1>Đăng Nhập</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>hoặc sử dụng tên và mật khẩu</span>
+                <input type="text" placeholder="Tên" name="name" required>
+                <input type="password" placeholder="Mật khẩu" name="password" required>
+                <a href="#">Quên Mật Khẩu?</a>
+                <button type="submit" name="btn_login">Đăng Nhập</button>
+            </form>
+        </div>
+
+        <!-- Chuyển đổi giữa đăng nhập và đăng ký -->
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Chào Mừng Quay Lại!</h1>
+                    <p>Nhập thông tin của bạn để sử dụng các tính năng của trang web</p>
+                    <button class="hidden" id="login">Đăng Nhập</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Xin Chào, Bạn!</h1>
+                    <p>Đăng ký với thông tin cá nhân để sử dụng các tính năng của trang web</p>
+                    <button class="hidden" id="register">Đăng Ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Lấy các phần tử cần thiết
-        const loginBtn = document.getElementById('loginBtn');
-        const popup = document.getElementById('loginPopup');
-        const closeBtn = document.getElementById('closeBtn');
+        const container = document.getElementById('container');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
 
-        // Mở popup khi nhấn nút đăng nhập
-        loginBtn.onclick = function() {
-            popup.style.display = 'block';
-        }
+        // Chuyển từ đăng nhập sang đăng ký
+        registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
+        });
 
-        // Đóng popup khi nhấn vào nút đóng
-        closeBtn.onclick = function() {
-            popup.style.display = 'none';
-        }
-
-        // Đóng popup khi click ra ngoài
-        window.onclick = function(event) {
-            if (event.target == popup) {
-                popup.style.display = 'none';
-            }
-        }
+        // Chuyển từ đăng ký sang đăng nhập
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
+        });
     </script>
 </body>
 

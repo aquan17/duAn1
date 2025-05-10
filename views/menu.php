@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/search.css">
+    <link rel="stylesheet" href="./assets/css/user.css">
 </head>
 
 <body>
@@ -29,7 +30,7 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="?act=/">Home</a></li>
+                        <li><a href="?act=/">Home</a></li>
                         <li><a href="?act=shop">Shop</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
@@ -42,6 +43,12 @@
                         </li>
                         <li><a href="">Blog</a></li>
                         <li><a href="">Contacts</a></li>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
+                            <li>
+                                <a href="./admin/?ctl="><img src="./assets/images/admin.png" alt="" width="40px"></a>
+                            </li>
+                        <?php endif; ?>
+
                     </ul>
                 </nav>
             </div>
@@ -50,8 +57,27 @@
                     <a href="#" id="searchIcon" class="search-switch"><img src="./assets/images/icon/search.png" alt=""></a>
                     <a href="#"><img src="./assets/images/icon/heart.png" alt=""></a>
                     <a href="?act=Cart"><img src="./assets/images/icon/cart.png" alt=""></a>
-                    <a href="#" id="loginBtn"><img src="./assets/images/icon/user1.png" alt=""></a>
-                    <?php require_once 'login.php' ?>
+                    <?php if (isset($_SESSION['user'])): ?>
+                        <!-- Hiển thị khi người dùng đã đăng nhập -->
+                        <div class="user-menu">
+                            <img src="./assets/images/icon/user1.png" alt="User Icon">
+                            <span class="dropdown-text">Hello, <?= htmlspecialchars($_SESSION['user']) ?>!</span>
+                            <ul class="dropdown-text">
+                                <li><a href="?act=profile">Thông tin cá nhân</a></li>
+                                <li><a href="?act=Cart">Đơn hàng của tôi</a></li>
+                                <li><a href="?act=logout" class="logout-btn">Đăng Xuất</a></li>
+                            </ul>
+
+                        </div>
+                        <p style="color: crimson;">Hello, <?= $_SESSION['user']  ?>!</p>
+                    <?php else: ?>
+                        <!-- Hiển thị nút Đăng nhập khi chưa đăng nhập -->
+                        <a href="?act=login" id="loginBtn">
+                            <img src="./assets/images/icon/user1.png" alt="User Icon">
+                            <span class="dropdown-text">Đăng Nhập</span>
+                        </a>
+                    <?php endif; ?>
+
                 </div>
                 <div id="searchContainer" style="display: none;">
                     <input type="text" id="searchInput" placeholder="Search for products..." />
@@ -61,7 +87,9 @@
         </div>
         <div class="canvas__open"><i class="fa fa-bars"></i></div>
     </div>
+    <script>
 
+    </script>
     <script src="./assets/js/jquery-3.3.1.min.js"></script>
     <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/jquery.nice-select.min.js"></script>
